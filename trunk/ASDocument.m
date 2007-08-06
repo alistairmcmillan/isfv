@@ -6,6 +6,7 @@
 //  Copyright __MyCompanyName__ 2007 . All rights reserved.
 //
 
+#import "NSString (ASExtensions).h"
 #import "ASDocument.h"
 
 @implementation ASDocument
@@ -14,7 +15,8 @@
 {
     self = [super init];
     if (self) {
-    
+		_files = [[NSMutableArray alloc] init];
+		_checkSums = [[NSMutableArray alloc] init];
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
     
@@ -43,15 +45,36 @@
 	// loaded the document's window.
 }
 
+- (void)parseSFV:(NSString *)fileContents {
+	// Go through each file and verify
+	NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
+	NSMutableArray *files = [[NSMutableArray alloc] init];
+	NSMutableArray *checkSums = [[NSMutableArray alloc] init];
+	NSString *line, *gLine;
+	int i = 0;
+	NSEnumerator *e = [lines objectEnumerator];
+	while (line = [e nextObject]) {
+		gLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		if ([gLine length] > 8 && [gLine characterAtIndex:0] != ';'
+			&& [gLine characterAtIndex:0] != '#') {
+			i = [gLine indexOfLastCharacter:' '];
+			if (i >= 0)	{
+				[files addObject:[gLine substringToIndex:i]];
+				[checkSums addObject:[gLine substringFromIndex:(i+1)]];
+			}
+		}
+		//[gLine release];
+	}
+	[_files setArray:files];
+	[_checkSums setArray:checkSums];
+}
+
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     BOOL readSuccess = NO;
-    NSAttributedString *fileContents = [[NSAttributedString alloc]
-            initWithData:data options:NULL documentAttributes:NULL
-				   error:outError];
+    NSString *fileContents = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     if (fileContents) {
         readSuccess = YES;
-		NSLog([fileContents string]);
-        //[self setText:fileContents];
+		[self parseSFV:fileContents];
         [fileContents release];
     }
     return readSuccess;
