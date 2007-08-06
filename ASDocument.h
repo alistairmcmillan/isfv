@@ -11,5 +11,7 @@
 
 @interface ASDocument : NSDocument
 {
+	NSMutableArray *_files;
+	NSMutableArray *_checkSums;
 }
 @end
