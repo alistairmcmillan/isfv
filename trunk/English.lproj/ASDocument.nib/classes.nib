@@ -1,6 +1,16 @@
 {
     IBClasses = (
         {CLASS = ASDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
+        {
+            CLASS = ASWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_level" = NSLevelIndicator; 
+                "_percentage" = NSTextField; 
+                "_status" = NSTextField; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
     ); 
