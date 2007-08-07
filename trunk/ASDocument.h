@@ -12,7 +12,6 @@
 @interface ASDocument : NSDocument
 {
 	ASWindowController *windowController;
-	NSMutableArray *_files;
-	NSMutableArray *_checkSums;
+	ASSFVData *_data;
 }
 @end
