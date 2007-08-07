@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		507B19970C67F04500343AC0 /* ASWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B19960C67F04500343AC0 /* ASWindowController.m */; };
 		507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D7F7D0C684DA7002D0607 /* ASAppController.m */; };
+		50ABE0E20C692B6C00270B20 /* iSFV.icns in Resources */ = {isa = PBXBuildFile; fileRef = 50ABE0E00C692B6C00270B20 /* iSFV.icns */; };
 		50C1D25B0C67C6B2006D567C /* NSString (ASExtensions).m in Sources */ = {isa = PBXBuildFile; fileRef = 50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */; };
 		50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C3AEF60C681D1D00B1C997 /* ASSFVData.m */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
@@ -39,6 +40,7 @@
 		507B19960C67F04500343AC0 /* ASWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASWindowController.m; sourceTree = "<group>"; };
 		507D7F7C0C684DA7002D0607 /* ASAppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASAppController.h; sourceTree = "<group>"; };
 		507D7F7D0C684DA7002D0607 /* ASAppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ASAppController.m; sourceTree = "<group>"; };
+		50ABE0E00C692B6C00270B20 /* iSFV.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = iSFV.icns; sourceTree = "<group>"; };
 		50C1D2590C67C6B2006D567C /* NSString (ASExtensions).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString (ASExtensions).h"; sourceTree = "<group>"; };
 		50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString (ASExtensions).m"; sourceTree = "<group>"; };
 		50C3AEF50C681D1D00B1C997 /* ASSFVData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSFVData.h; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				50ABE0E00C692B6C00270B20 /* iSFV.icns */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
 				2A37F4B4FDCFA73011CA2CEA /* ASDocument.nib */,
@@ -191,6 +194,7 @@
 				8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */,
 				8D15AC2E0486D014006FF6A4 /* ASDocument.nib in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				50ABE0E20C692B6C00270B20 /* iSFV.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
