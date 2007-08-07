@@ -13,6 +13,10 @@
 	IBOutlet NSTextField *_status;
 	IBOutlet NSTextField *_percentage;
 	IBOutlet NSLevelIndicator *_level;
+	ASSFVData *_data;
 }
+
+- (void) populateData: (ASSFVData*)data;
+- (void) updateData: (int)index percentCompleted:(float)f;
 
 @end

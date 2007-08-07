@@ -1,5 +1,6 @@
 {
     IBClasses = (
+        {CLASS = ASAppController; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = ASDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
         {
             ACTIONS = {openDocument = id; }; 

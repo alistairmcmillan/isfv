@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		506FB4820C61A057000D23B2 /* ASDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 506FB4810C61A057000D23B2 /* ASDocumentController.m */; };
 		507B19970C67F04500343AC0 /* ASWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B19960C67F04500343AC0 /* ASWindowController.m */; };
+		507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D7F7D0C684DA7002D0607 /* ASAppController.m */; };
 		50C1D25B0C67C6B2006D567C /* NSString (ASExtensions).m in Sources */ = {isa = PBXBuildFile; fileRef = 50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */; };
+		50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C3AEF60C681D1D00B1C997 /* ASSFVData.m */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2E0486D014006FF6A4 /* ASDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* ASDocument.nib */; };
@@ -36,8 +38,12 @@
 		506FB4810C61A057000D23B2 /* ASDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDocumentController.m; sourceTree = "<group>"; };
 		507B19950C67F04500343AC0 /* ASWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASWindowController.h; sourceTree = "<group>"; };
 		507B19960C67F04500343AC0 /* ASWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASWindowController.m; sourceTree = "<group>"; };
+		507D7F7C0C684DA7002D0607 /* ASAppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASAppController.h; sourceTree = "<group>"; };
+		507D7F7D0C684DA7002D0607 /* ASAppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ASAppController.m; sourceTree = "<group>"; };
 		50C1D2590C67C6B2006D567C /* NSString (ASExtensions).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString (ASExtensions).h"; sourceTree = "<group>"; };
 		50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString (ASExtensions).m"; sourceTree = "<group>"; };
+		50C3AEF50C681D1D00B1C997 /* ASSFVData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSFVData.h; sourceTree = "<group>"; };
+		50C3AEF60C681D1D00B1C997 /* ASSFVData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSFVData.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* iSFV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSFV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -95,6 +101,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				50C3AEF50C681D1D00B1C997 /* ASSFVData.h */,
+				50C3AEF60C681D1D00B1C997 /* ASSFVData.m */,
 				50C1D2590C67C6B2006D567C /* NSString (ASExtensions).h */,
 				50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */,
 				2A37F4AEFDCFA73011CA2CEA /* ASDocument.h */,
@@ -103,6 +111,8 @@
 				506FB4810C61A057000D23B2 /* ASDocumentController.m */,
 				507B19950C67F04500343AC0 /* ASWindowController.h */,
 				507B19960C67F04500343AC0 /* ASWindowController.m */,
+				507D7F7C0C684DA7002D0607 /* ASAppController.h */,
+				507D7F7D0C684DA7002D0607 /* ASAppController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -197,6 +207,8 @@
 				506FB4820C61A057000D23B2 /* ASDocumentController.m in Sources */,
 				50C1D25B0C67C6B2006D567C /* NSString (ASExtensions).m in Sources */,
 				507B19970C67F04500343AC0 /* ASWindowController.m in Sources */,
+				50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */,
+				507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
