@@ -7,6 +7,7 @@
 //
 
 #import "NSString (ASExtensions).h"
+#import "ASWindowController.h"
 #import "ASDocument.h"
 
 @implementation ASDocument
@@ -24,25 +25,31 @@
     return self;
 }
 
-//- (void)awakeFromNib
-//{
-//	[controller openDocument:self];
-//}
-
-- (NSString *)windowNibName
+- (void)makeWindowControllers
 {
-    // Override returning the nib file name of the document
-    // If you need to use a subclass of NSWindowController or if your document 
-	// supports multiple NSWindowControllers, you should remove this method and
-	// override -makeWindowControllers instead.
-    return @"ASDocument";
+	windowController = [[ASWindowController alloc] initWithWindowNibName:@"ASDocument"];
+	[self addWindowController:windowController];
+	[windowController window];
 }
+	
+//- (NSString *)windowNibName
+//{
+//    // Override returning the nib file name of the document
+//    // If you need to use a subclass of NSWindowController or if your document 
+//	// supports multiple NSWindowControllers, you should remove this method and
+//	// override -makeWindowControllers instead.
+//    return @"ASDocument";
+//}
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has
 	// loaded the document's window.
+}
+
+- (void)verifySFV {
+
 }
 
 - (void)parseSFV:(NSString *)fileContents {
@@ -63,9 +70,10 @@
 				[checkSums addObject:[gLine substringFromIndex:(i+1)]];
 			}
 		}
-		//[gLine release];
 	}
+	[_files removeAllObjects];
 	[_files setArray:files];
+	[_checkSums removeAllObjects];
 	[_checkSums setArray:checkSums];
 }
 
@@ -75,6 +83,7 @@
     if (fileContents) {
         readSuccess = YES;
 		[self parseSFV:fileContents];
+		[self verifySFV];
         [fileContents release];
     }
     return readSuccess;
@@ -88,34 +97,6 @@
 										code:NSFileWriteUnknownError userInfo:nil];
     }
     return [[NSData alloc] init]; //data;
-}
-
-- (NSData *)dataRepresentationOfType:(NSString *)aType
-{
-    // Insert code here to write your document from the given data.  You can
-	// also choose to override -fileWrapperRepresentationOfType: or 
-	// -writeToFile:ofType: instead.
-    
-    // For applications targeted for Tiger or later systems, you should use the
-	// new Tiger API -dataOfType:error:.  In this case you can also choose to
-	// override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or 
-	// -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-
-    return nil;
-}
-
-- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)aType
-{
-    // Insert code here to read your document from the given data.  You can also
-	// choose to override -loadFileWrapperRepresentation:ofType: or
-	// -readFromFile:ofType: instead.
-    
-    // For applications targeted for Tiger or later systems, you should use the
-	// new Tiger API readFromData:ofType:error:.  In this case you can also
-	// choose to override -readFromURL:ofType:error: or
-	// -readFromFileWrapper:ofType:error: instead.
-    
-    return YES;
 }
 
 @end
