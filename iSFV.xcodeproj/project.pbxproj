@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		506FB4820C61A057000D23B2 /* ASDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 506FB4810C61A057000D23B2 /* ASDocumentController.m */; };
 		507B19970C67F04500343AC0 /* ASWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B19960C67F04500343AC0 /* ASWindowController.m */; };
 		507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D7F7D0C684DA7002D0607 /* ASAppController.m */; };
 		50C1D25B0C67C6B2006D567C /* NSString (ASExtensions).m in Sources */ = {isa = PBXBuildFile; fileRef = 50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */; };
@@ -204,7 +203,6 @@
 			files = (
 				8D15AC310486D014006FF6A4 /* ASDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				506FB4820C61A057000D23B2 /* ASDocumentController.m in Sources */,
 				50C1D25B0C67C6B2006D567C /* NSString (ASExtensions).m in Sources */,
 				507B19970C67F04500343AC0 /* ASWindowController.m in Sources */,
 				50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */,
