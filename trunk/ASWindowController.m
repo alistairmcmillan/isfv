@@ -34,7 +34,16 @@
 	[_status setStringValue:[status stringByAppendingString:[_data fileAtIndex:index]]];
 	[status release];
 	[_percentage setStringValue:@"0%"];
-	[_level setFloatValue:(f*100)];
+	[_level setFloatValue:f];
+}
+
+- (void) percentCompleted:(float)p {
+	[_level setFloatValue:p];
+}
+
+- (void) filePercentCompleted:(float)p {
+	NSString* s = [NSString stringWithFormat:@"%1.1f%%", p];
+	[_percentage setStringValue:s];
 }
 
 - (void)windowDidLoad {

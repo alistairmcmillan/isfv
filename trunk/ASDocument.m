@@ -19,6 +19,7 @@
 //	You should have received a copy of the GNU General Public License
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#import <sys/stat.h>
 #import "NSString (ASExtensions).h"
 #import "ASSFVData.h"
 #import "ASWindowController.h"
@@ -101,10 +102,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	
 	if (buffer && count) {
 		do {
-			CRC =
-			((CRC >> 8) & 0xFFFFFF) ^
-			CRCTABLE[(unsigned char)((CRC & 0xff) ^
-									 *buffer++)];
+			CRC = ((CRC >> 8) & 0xFFFFFF) ^
+			CRCTABLE[(unsigned char)((CRC & 0xff) ^	 *buffer++)];
 		}
 		while (--count);
 		
@@ -112,12 +111,14 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	return CRC;
 }
 
-long getFileCRC(char *filename)
+- (long) getFileCRC:(char *)filename atIndex:(int)index
 {
 	unsigned long crc = 0xffffffff;
 	FILE *f;
 	long totalread = 0;
 	long localread;
+	long filesize;
+	struct stat stbuf;
 	
 	/*
 	 * Note: different buffer sizes may result in noticable 
@@ -125,14 +126,19 @@ long getFileCRC(char *filename)
 	 * free to modify.
 	 */
 #define BUFFERSIZE 65536*16*8
-	char buffer[BUFFERSIZE];
+	char *buffer = malloc(BUFFERSIZE*sizeof(char)); 
 	
 	if ((f = fopen(filename, "rb")) != NULL) {
+		stat(filename, &stbuf);
+		filesize = stbuf.st_size;
 		do {
 			if ((localread = fread(buffer, 1, BUFFERSIZE, f))) {
 				crc = updateCRC(crc, buffer, localread);
 				totalread = totalread + localread;
 			}
+			[windowController percentCompleted:
+				(100.*((float)index+(totalread/filesize))/[_data count])];
+			[windowController filePercentCompleted:(100.*totalread/filesize)];
 		}
 		while (localread > 0);
 		fclose(f);
@@ -140,9 +146,10 @@ long getFileCRC(char *filename)
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
 		
-		fprintf(stderr, "\nFatal error: cannot read file: %s\n",
-				filename);
+		fprintf(stderr, "\nFatal error: cannot read file: %s\n", filename);
 	}
+	
+	free(buffer);
 	
 	return crc;
 }
@@ -154,11 +161,11 @@ long getFileCRC(char *filename)
 	NSEnumerator *c = [[_data checkSums] objectEnumerator];
 	NSString *file, *checkSum;
 	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
-		[windowController updateData:i percentCompleted:((float)i/[_data count])];
-		sleep(1);
+		[windowController updateData:i percentCompleted:(100*(float)i/[_data count])];
+		NSLog(@"%X", [self getFileCRC:"/tmp/file" atIndex:i]);
 		i++;
 	}
-	[windowController updateData:(i-1) percentCompleted:((float)i/[_data count])];
+	[windowController updateData:(i-1) percentCompleted:(100*(float)i/[_data count])];
 	[pool release];
 }
 

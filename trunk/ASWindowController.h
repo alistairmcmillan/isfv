@@ -30,6 +30,8 @@
 }
 
 - (void) populateData: (ASSFVData*)data;
-- (void) updateData: (int)index percentCompleted:(float)f;
+- (void) updateData: (int)index percentCompleted:(float)percent;
+- (void) percentCompleted:(float)percent;
+- (void) filePercentCompleted:(float)percent;
 
 @end
