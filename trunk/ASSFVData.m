@@ -30,6 +30,7 @@
     if (self) {
 		_files = [[NSMutableArray alloc] init];
 		_checkSums = [[NSMutableArray alloc] init];
+		_statuses = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -39,6 +40,14 @@
 	[_files setArray:files];
 	[_checkSums removeAllObjects];
 	[_checkSums setArray:checkSums];
+	[_statuses removeAllObjects];
+	int i = [self count];
+	NSNumber* statuses[i];
+	NSNumber* value = [NSNumber numberWithInt:ASSFVNotChecked];
+	while(--i >= 0) {
+		statuses[i] = value;
+	}
+	[_statuses setArray:[NSArray arrayWithObjects:statuses count:[self count]]];
 }
 
 - (int) count {
@@ -86,11 +95,21 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	return [_checkSums objectAtIndex:index];
 }
 
-- (NSArray*) files {
-	return _files;
+- (id) statusAtIndex:(int)index {
+	NSParameterAssert(index >= 0 && index < [self count]);
+	return [_statuses objectAtIndex:index];
 }
-- (NSArray*) checkSums {
-	return _checkSums;
+
+- (NSEnumerator*) filesEnumerator {
+	return [_files objectEnumerator];
+}
+
+- (NSEnumerator*) checkSumsEnumerator {
+	return [_checkSums objectEnumerator];
+}
+
+- (NSEnumerator*) statusesEnumerator {
+	return [_statuses objectEnumerator];
 }
 
 @end

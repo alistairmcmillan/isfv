@@ -111,7 +111,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	return CRC;
 }
 
-- (long) getFileCRC:(char *)filename atIndex:(int)index
+- (long) getFileCRC:(NSString *)filename atIndex:(int)index
 {
 	unsigned long crc = 0xffffffff;
 	FILE *f;
@@ -128,8 +128,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 #define BUFFERSIZE 65536*16*8
 	char *buffer = malloc(BUFFERSIZE*sizeof(char)); 
 	
-	if ((f = fopen(filename, "rb")) != NULL) {
-		stat(filename, &stbuf);
+	if ((f = fopen([filename UTF8String], "rb")) != NULL) {
+		stat([filename UTF8String], &stbuf);
 		filesize = stbuf.st_size;
 		do {
 			if ((localread = fread(buffer, 1, BUFFERSIZE, f))) {
@@ -146,7 +146,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
 		
-		fprintf(stderr, "\nFatal error: cannot read file: %s\n", filename);
+		NSLog(@"Fatal error: cannot read file: %s", filename);
 	}
 	
 	free(buffer);
@@ -157,12 +157,25 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 - (void)verifySFV:(id)object {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	int i = 0;
-	NSEnumerator *e = [[_data files] objectEnumerator];
-	NSEnumerator *c = [[_data checkSums] objectEnumerator];
+	long realCheckSum;
+	NSEnumerator *e = [_data filesEnumerator];
+	NSEnumerator *c = [_data checkSumsEnumerator];
 	NSString *file, *checkSum;
+	ASSFVStatus status = [[_data statusAtIndex:i] intValue];
+	NSString *sfvPath = [[[[self fileURL] relativePath] stringByDeletingLastPathComponent]
+		stringByAppendingString:@"/"];
 	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
+		status = [[_data statusAtIndex:i] intValue];
 		[windowController updateData:i percentCompleted:(100*(float)i/[_data count])];
-		NSLog(@"%X", [self getFileCRC:"/tmp/file" atIndex:i]);
+		realCheckSum = [self getFileCRC:[sfvPath stringByAppendingString:file] atIndex:i];
+		if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X", realCheckSum]]
+			== NSOrderedSame)
+			status = ASSFVMatchCRC;
+		else
+			status = ASSFVNotMatchCRC;
+#ifndef DEBUG
+		NSLog(@"%08X %@ %@", realCheckSum, checkSum, file);
+#endif
 		i++;
 	}
 	[windowController updateData:(i-1) percentCompleted:(100*(float)i/[_data count])];
@@ -177,7 +190,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	int i = 0;
 	NSEnumerator *e = [lines objectEnumerator];
 	while (line = [e nextObject]) {
-		gLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		gLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		if ([gLine length] > 8 && [gLine characterAtIndex:0] != ';'
 			&& [gLine characterAtIndex:0] != '#') {
 			i = [gLine indexOfLastCharacter:' '];
