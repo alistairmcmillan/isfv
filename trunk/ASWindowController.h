@@ -26,12 +26,18 @@
 	IBOutlet NSTextField *_status;
 	IBOutlet NSTextField *_percentage;
 	IBOutlet NSLevelIndicator *_level;
+	IBOutlet NSButton *_arrow;
+	IBOutlet NSTextField *_details;
+	IBOutlet NSScrollView *_scroller;
 	ASSFVData *_data;
 }
 
+- (IBAction)showDetails:(id)sender;
 - (void) populateData: (ASSFVData*)data;
 - (void) updateData: (int)index percentCompleted:(float)percent;
 - (void) percentCompleted:(float)percent;
 - (void) filePercentCompleted:(float)percent;
+- (void) failedFile:(BOOL)failed;
+- (void) warningFile:(BOOL)warning;
 
 @end

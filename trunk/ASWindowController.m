@@ -58,12 +58,42 @@
 		[_status setStringValue:@""];
 		[_percentage setStringValue:@""];
 	}
+	[_level setWarningValue:0];
+	[_level setCriticalValue:0];
 	[_level setFloatValue:0.00];
 }
 
 - (void)showWindow:(id)sender {
 	[super showWindow:sender];
 	[[self document] windowControllerDidLoadNib:self];
+}
+
+- (void) failedFile:(BOOL)failed {
+	if(failed)
+		[_level setCriticalValue:0.00001];
+	else
+		[_level setCriticalValue:0];
+}
+
+- (void) warningFile:(BOOL)warning {
+	if(warning)
+		[_level setWarningValue:0.00001];
+	else
+		[_level setWarningValue:0];
+}
+
+- (IBAction)showDetails:(id)sender {
+	if (sender == _details)
+		[_arrow setState:NSOnState];
+	NSSize currentSize = [[self window] contentMaxSize];
+	if ([sender state] == NSOnState) {
+		[[self window] setContentMaxSize:NSMakeSize(currentSize.width,600)];
+		[_scroller setHidden:NO];
+	}
+	else {
+		[[self window] setContentMaxSize:NSMakeSize(currentSize.width,100)];
+		[_scroller setHidden:YES];
+	}
 }
 
 @end

@@ -154,6 +154,21 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	return crc;
 }
 
+- (NSString*)autoCorrectPath:(NSString*)path ofFile:(NSString*)file {
+	NSFileManager *fileMan = [NSFileManager defaultManager];
+	NSString *filePath = [path stringByAppendingString:file];
+	if (![fileMan fileExistsAtPath:filePath]) {
+		NSMutableString* correctedFile = [NSMutableString stringWithString:file];
+		[correctedFile replaceOccurrencesOfString:@"\\"
+									   withString:@"/"
+										  options:NSBackwardsSearch
+											range:NSMakeRange(0,[file length])];
+		return [path stringByAppendingString:correctedFile];
+	}
+	else
+		return filePath;
+}
+
 - (void)verifySFV:(id)object {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	int i = 0;
@@ -164,19 +179,54 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	ASSFVStatus status = [[_data statusAtIndex:i] intValue];
 	NSString *sfvPath = [[[[self fileURL] relativePath] stringByDeletingLastPathComponent]
 		stringByAppendingString:@"/"];
+	NSString *filePath;
+	NSFileManager *fileMan = [NSFileManager defaultManager];
 	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
 		status = [[_data statusAtIndex:i] intValue];
 		[windowController updateData:i percentCompleted:(100*(float)i/[_data count])];
-		realCheckSum = [self getFileCRC:[sfvPath stringByAppendingString:file] atIndex:i];
-		if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X", realCheckSum]]
-			== NSOrderedSame)
-			status = ASSFVMatchCRC;
-		else
-			status = ASSFVNotMatchCRC;
+		filePath = [sfvPath stringByAppendingString:file];
+		filePath = [self autoCorrectPath:sfvPath ofFile:file];
+		if (![fileMan fileExistsAtPath:filePath]) {
+			status = ASSFVMissing;
+			[windowController warningFile:YES];
+		}
+		if (![fileMan isReadableFileAtPath:filePath]) {
+			status = ASSFVNoAccess;
+			[windowController warningFile:YES];
+		}
+		else {
+			realCheckSum = [self getFileCRC:filePath atIndex:i];
+			if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X", realCheckSum]]
+				== NSOrderedSame)
+				status = ASSFVMatchCRC;
+			else {
+				status = ASSFVNotMatchCRC;
+				[windowController failedFile:YES];
+			}
+		}
 #ifndef DEBUG
-		NSLog(@"%08X %@ %@", realCheckSum, checkSum, file);
+		switch(status) {
+			case ASSFVMatchCRC:
+				NSLog(@"%@ - OK", file);
+				break;
+			case ASSFVNotMatchCRC:
+				NSLog(@"%@ - CRC doesn't match, is %08X, should be %@",
+					  file, realCheckSum, checkSum);
+				break;
+			case ASSFVMissing:
+				NSLog(@"%@ - Missing", file);
+				break;
+			case ASSFVNoAccess:
+				NSLog(@"%@ - No Access", file);
+				break;
+			case ASSFVUnknownError:
+				NSLog(@"%@ - Unknown Error", file);
+			default:
+				NSLog(@"CRITICAL ERROR: Should not get here.");
+		}
 #endif
-		i++;
+		[_data replaceStatusAtIndex:i with:status];
+		i++; //sleep(1);
 	}
 	[windowController updateData:(i-1) percentCompleted:(100*(float)i/[_data count])];
 	[pool release];
