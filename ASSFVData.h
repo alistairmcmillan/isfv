@@ -21,17 +21,28 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef enum _ASSFVStatus {
+	ASSFVNotChecked = 1,
+	ASSFVMatchCRC = 2,
+	ASSFVNotMatchCRC = 4,
+	ASSFVMissing = 8,
+	ASSFVNoAccess = 64,
+	ASSFVUnknownError = 128
+} ASSFVStatus;
 
 @interface ASSFVData : NSObject {
 	NSMutableArray *_files;
 	NSMutableArray *_checkSums;
+	NSMutableArray *_statuses;
 }
 
 - (int) count;
 - (void) setFiles:(NSArray*)files withCheckSums:(NSArray*)checkSums;
 - (id) fileAtIndex:(int)index;
 - (id) checkSumAtIndex:(int)index;
-- (NSArray*) files;
-- (NSArray*) checkSums;
+- (id) statusAtIndex:(int)index;
+- (NSEnumerator*) filesEnumerator;
+- (NSEnumerator*) checkSumsEnumerator;
+- (NSEnumerator*) statusesEnumerator;
 
 @end
