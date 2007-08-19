@@ -100,6 +100,10 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	return [_statuses objectAtIndex:index];
 }
 
+- (void) replaceStatusAtIndex:(int)i with:(ASSFVStatus)status {
+	[_statuses replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:status]];
+}
+
 - (NSEnumerator*) filesEnumerator {
 	return [_files objectEnumerator];
 }

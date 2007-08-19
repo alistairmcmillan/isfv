@@ -2,11 +2,15 @@
     IBClasses = (
         {CLASS = ASDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
         {
+            ACTIONS = {showDetails = id; }; 
             CLASS = ASWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                "_arrow" = NSButton; 
+                "_details" = NSTextField; 
                 "_level" = NSLevelIndicator; 
                 "_percentage" = NSTextField; 
+                "_scroller" = NSScrollView; 
                 "_status" = NSTextField; 
             }; 
             SUPERCLASS = NSWindowController; 
