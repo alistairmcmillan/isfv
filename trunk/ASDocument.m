@@ -25,6 +25,8 @@
 #import "ASWindowController.h"
 #import "ASDocument.h"
 
+#define DEBUG
+
 @implementation ASDocument
 
 - (id)init
@@ -204,7 +206,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				[windowController failedFile:YES];
 			}
 		}
-#ifndef DEBUG
+#ifdef DEBUG
 		switch(status) {
 			case ASSFVMatchCRC:
 				NSLog(@"%@ - OK", file);

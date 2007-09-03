@@ -12,6 +12,7 @@
                 "_percentage" = NSTextField; 
                 "_scroller" = NSScrollView; 
                 "_status" = NSTextField; 
+                "_table" = NSTableView; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 
