@@ -57,10 +57,34 @@
 - (id) tableView:(NSTableView *) aTableView
 objectValueForTableColumn:(NSTableColumn *) aTableColumn
 			 row:(int) rowIndex {
-	if ([aTableColumn identifier] == @"file") {
+	if ([[aTableColumn identifier] isEqual:@"file"]) {
 		return [self fileAtIndex:rowIndex];
-	} else if ([aTableColumn identifier] == @"checksum") {
+	} else if ([[aTableColumn identifier] isEqual:@"checksum"]) {
 		return [self checkSumAtIndex:rowIndex];
+	} else if ([[aTableColumn identifier] isEqual:@"status"]) {
+		switch([[self statusAtIndex:rowIndex] intValue]) {
+			case ASSFVNotChecked:
+				return @"";
+				break;
+			case ASSFVMatchCRC:
+				return @"OK";
+				break;
+			case ASSFVNotMatchCRC:
+				return @"Corrupt";
+				break;
+			case ASSFVMissing:
+				return @"Missing";
+				break;
+			case ASSFVNoAccess:
+				return @"No Access";
+				break;
+			case ASSFVUnknownError:
+				return @"Unknown Error";
+				break;
+			default:
+				NSLog(@"CRITICAL ERROR: Should not get here.");
+				return @"Critical Error";
+		}
 	} else
 		return @"Undefined";
 }
@@ -70,10 +94,10 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
    forTableColumn:(NSTableColumn * )aTableColumn
 			  row:(int)rowIndex {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [self count]);
-	if ([aTableColumn identifier] == @"file") {
+	if ([[aTableColumn identifier] isEqual:@"file"]) {
 		[_files removeObjectAtIndex:rowIndex];
 		[_files insertObject:anObject atIndex:rowIndex];
-	} else if ([aTableColumn identifier] == @"checksum") {
+	} else if ([[aTableColumn identifier] isEqual:@"checksum"]) {
 		[_checkSums removeObjectAtIndex:rowIndex];
 		[_checkSums insertObject:anObject atIndex:rowIndex];
 	} else

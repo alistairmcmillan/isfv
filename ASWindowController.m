@@ -22,6 +22,8 @@
 #import "ASSFVData.h"
 #import "ASWindowController.h"
 
+#define WMAX_HEIGHT 100
+
 @implementation ASWindowController
 
 - (void) populateData: (ASSFVData*)data {
@@ -35,6 +37,7 @@
 	[status release];
 	[_percentage setStringValue:@"0%"];
 	[_level setFloatValue:f];
+	[_table reloadData];
 }
 
 - (void) percentCompleted:(float)p {
@@ -61,6 +64,9 @@
 	[_level setWarningValue:0];
 	[_level setCriticalValue:0];
 	[_level setFloatValue:0.00];
+	[_level setEnabled:NO];
+	_extendedHeight = 150;
+	[_table setDataSource:_data];
 }
 
 - (void)showWindow:(id)sender {
@@ -85,14 +91,27 @@
 - (IBAction)showDetails:(id)sender {
 	if (sender == _details)
 		[_arrow setState:NSOnState];
-	NSSize currentSize = [[self window] contentMaxSize];
-	if ([sender state] == NSOnState) {
-		[[self window] setContentMaxSize:NSMakeSize(currentSize.width,600)];
+	NSSize currentMaxSize = [[self window] contentMaxSize];
+	NSSize currentMinSize = [[self window] contentMinSize];
+	NSRect currentRect = [[self window] frame];
+	if ([sender state] == NSOnState) { // Extend window
+		currentRect.origin.y -= _extendedHeight;
+		currentRect.size.height += _extendedHeight;
+		[[self window] setContentMaxSize:NSMakeSize(currentMaxSize.width,1600)];
+		[[self window] setContentMinSize:NSMakeSize(currentMinSize.width,150)];
+		[[self window] setFrame:currentRect display:YES animate:YES];
+		[_scroller setFrame:NSMakeRect(20,20,currentRect.size.width-40,_extendedHeight-10)];
 		[_scroller setHidden:NO];
 	}
-	else {
-		[[self window] setContentMaxSize:NSMakeSize(currentSize.width,100)];
+	else { // Collapse window
+		_extendedHeight = [[self window] contentRectForFrameRect:currentRect]
+			.size.height - WMAX_HEIGHT;
+		currentRect.origin.y += _extendedHeight;
+		currentRect.size.height -= _extendedHeight;
+		[[self window] setContentMaxSize:NSMakeSize(currentMaxSize.width,WMAX_HEIGHT)];
+		[[self window] setContentMinSize:NSMakeSize(currentMinSize.width,WMAX_HEIGHT)];
 		[_scroller setHidden:YES];
+		[[self window] setFrame:currentRect display:YES animate:YES];
 	}
 }
 

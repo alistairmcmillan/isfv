@@ -29,7 +29,9 @@
 	IBOutlet NSButton *_arrow;
 	IBOutlet NSTextField *_details;
 	IBOutlet NSScrollView *_scroller;
+	IBOutlet NSTableView *_table;
 	ASSFVData *_data;
+	int _extendedHeight;
 }
 
 - (IBAction)showDetails:(id)sender;
