@@ -12,7 +12,7 @@
 				<string>sfv</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string></string>
+			<string>iSFVDocument.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>text/sfv</string>

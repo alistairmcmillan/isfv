@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		506545050C8B8E14004D2DA9 /* iSFVDocument.icns in Resources */ = {isa = PBXBuildFile; fileRef = 506545040C8B8E14004D2DA9 /* iSFVDocument.icns */; };
 		507B19970C67F04500343AC0 /* ASWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B19960C67F04500343AC0 /* ASWindowController.m */; };
 		507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D7F7D0C684DA7002D0607 /* ASAppController.m */; };
 		50ABE0E20C692B6C00270B20 /* iSFV.icns in Resources */ = {isa = PBXBuildFile; fileRef = 50ABE0E00C692B6C00270B20 /* iSFV.icns */; };
@@ -34,6 +35,7 @@
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* iSFV_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iSFV_Prefix.pch; sourceTree = "<group>"; };
+		506545040C8B8E14004D2DA9 /* iSFVDocument.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = iSFVDocument.icns; sourceTree = "<group>"; };
 		506FB4800C61A057000D23B2 /* ASDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDocumentController.h; sourceTree = "<group>"; };
 		506FB4810C61A057000D23B2 /* ASDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDocumentController.m; sourceTree = "<group>"; };
 		507B19950C67F04500343AC0 /* ASWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASWindowController.h; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				50ABE0E00C692B6C00270B20 /* iSFV.icns */,
+				506545040C8B8E14004D2DA9 /* iSFVDocument.icns */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
 				2A37F4B4FDCFA73011CA2CEA /* ASDocument.nib */,
@@ -195,6 +198,7 @@
 				8D15AC2E0486D014006FF6A4 /* ASDocument.nib in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				50ABE0E20C692B6C00270B20 /* iSFV.icns in Resources */,
+				506545050C8B8E14004D2DA9 /* iSFVDocument.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
