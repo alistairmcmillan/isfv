@@ -87,3 +87,5 @@ rm -rf "${MOUNT}"
 rm -rf "${MOUNT_SRC}"
 rm -rf "${TEMPLATE}"
 rm -rf "${TEMPLATE_SRC}"
+
+echo "Done!  Don't forget to tag the release"
