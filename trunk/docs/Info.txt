@@ -1,0 +1,5 @@
+Description:
+iSFV is an easy to use integrity checker for SFV files. Use it to test for corrupt files in packages that come with SFV files.
+
+Purpose:
+When files are transfered across networks and different machines, there is a chance for corruption to occur in the process.  This is why some packages come with SFV files that can be used to verify the integrity of the files.  iSFV can be used as a quick utility to open these SFV files and do the checking.
