@@ -25,7 +25,7 @@
 #import "ASWindowController.h"
 #import "ASDocument.h"
 
-#define DEBUG
+//#define DEBUG
 
 @implementation ASDocument
 
@@ -34,6 +34,7 @@
     self = [super init];
     if (self) {
 		_data = [[ASSFVData alloc] init];
+		_date = [[NSDate alloc] init];
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
     
@@ -138,13 +139,13 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				crc = updateCRC(crc, buffer, localread);
 				totalread = totalread + localread;
 			}
-			[windowController percentCompleted:
-				(100.*((float)index+(totalread/filesize))/[_data count])];
-			[windowController filePercentCompleted:(100.*totalread/filesize)];
+			_percentCompleted = (100.*((float)index+(totalread/filesize))/[_data count]);
+			_filePercentCompleted = (100.*totalread/filesize);
+			_dataRead += totalread;
 		}
-		while (localread > 0);
+		while (localread > 0 && !_threadShouldExit);
 		fclose(f);
-		
+				
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
 		
@@ -171,8 +172,37 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		return filePath;
 }
 
+- (void) handleTimer:(NSTimer *)timer
+{
+	if (!_threadShouldExit) {
+		[windowController percentCompleted:_percentCompleted];
+		[windowController filePercentCompleted:_filePercentCompleted];
+		[windowController setInfoSpeed:(int)(_dataRead/(-[_date timeIntervalSinceNow]))
+							  withTime:0];
+	} else {
+		[timer invalidate];
+	}
+}
+
+- (void) updateGUIEnable {
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1
+													  target:self
+													selector:@selector(handleTimer:)
+													userInfo:nil
+													 repeats:YES];
+	[timer userInfo];
+}
+
+- (void) updateData: (NSNumber *)index {
+	[windowController updateData:[index intValue] percentCompleted:_percentCompleted];
+}
+
 - (void)verifySFV:(id)object {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	_date = [_date init];
+	_dataRead = 0;
+	_percentCompleted = 0;
+	_filePercentCompleted = 0;
 	int i = 0;
 	long realCheckSum;
 	NSEnumerator *e = [_data filesEnumerator];
@@ -183,20 +213,29 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		stringByAppendingString:@"/"];
 	NSString *filePath;
 	NSFileManager *fileMan = [NSFileManager defaultManager];
+	
+	[self performSelectorOnMainThread:@selector(updateGUIEnable)
+						   withObject:nil
+						waitUntilDone:YES];
+	
 	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
 		status = [[_data statusAtIndex:i] intValue];
-		[windowController updateData:i percentCompleted:(100*(float)i/[_data count])];
+		_percentCompleted = (100*(float)i/[_data count]);
+		[self performSelectorOnMainThread:@selector(updateData:)
+							   withObject:[NSNumber numberWithInt:i]
+							waitUntilDone:NO];
 		filePath = [sfvPath stringByAppendingString:file];
 		filePath = [self autoCorrectPath:sfvPath ofFile:file];
 		if (![fileMan fileExistsAtPath:filePath]) {
 			status = ASSFVMissing;
 			[windowController warningFile:YES];
 		}
-		if (![fileMan isReadableFileAtPath:filePath]) {
+		else if (![fileMan isReadableFileAtPath:filePath]) {
 			status = ASSFVNoAccess;
 			[windowController warningFile:YES];
 		}
 		else {
+			_filePercentCompleted = 0;
 			realCheckSum = [self getFileCRC:filePath atIndex:i];
 			if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X", realCheckSum]]
 				== NSOrderedSame)
@@ -228,9 +267,15 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		}
 #endif
 		[_data replaceStatusAtIndex:i with:status];
-		i++; //sleep(1);
+		i++;
+		if (_threadShouldExit)
+			break;
 	}
-	[windowController updateData:(i-1) percentCompleted:(100*(float)i/[_data count])];
+	_percentCompleted = (100*(float)i/[_data count]);
+	[self performSelectorOnMainThread:@selector(updateData:)
+						   withObject:[NSNumber numberWithInt:(i-1)]
+						waitUntilDone:YES];
+	_threadShouldExit = YES;
 	[pool release];
 }
 
@@ -267,6 +312,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 }
 
 - (void) windowControllerDidLoadNib:(id)sender {
+	_threadShouldExit = NO;
 	[NSThread detachNewThreadSelector: @selector(verifySFV:)
 							 toTarget: self withObject: nil];
 }
@@ -280,5 +326,12 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
     }
     return [[NSData alloc] init]; //data;
 }
+
+- (void)close
+{
+	_threadShouldExit = YES;
+	[super close];
+}
+
 
 @end

@@ -8,6 +8,7 @@
             OUTLETS = {
                 "_arrow" = NSButton; 
                 "_details" = NSTextField; 
+                "_info" = NSTextField; 
                 "_level" = NSLevelIndicator; 
                 "_percentage" = NSTextField; 
                 "_scroller" = NSScrollView; 

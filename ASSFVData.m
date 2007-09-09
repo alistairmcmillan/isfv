@@ -120,6 +120,8 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 }
 
 - (id) statusAtIndex:(int)index {
+	if ([self count] <= 0)
+		return nil;
 	NSParameterAssert(index >= 0 && index < [self count]);
 	return [_statuses objectAtIndex:index];
 }

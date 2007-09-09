@@ -30,6 +30,7 @@
 	IBOutlet NSTextField *_details;
 	IBOutlet NSScrollView *_scroller;
 	IBOutlet NSTableView *_table;
+	IBOutlet NSTextField *_info;
 	ASSFVData *_data;
 	int _extendedHeight;
 }
@@ -41,5 +42,6 @@
 - (void) filePercentCompleted:(float)percent;
 - (void) failedFile:(BOOL)failed;
 - (void) warningFile:(BOOL)warning;
+- (void) setInfoSpeed: (int)speed withTime: (int)time;
 
 @end
