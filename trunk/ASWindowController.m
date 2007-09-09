@@ -70,8 +70,16 @@
 		t = [NSString stringWithString:@"-"];
 		tu = [NSString stringWithString:@""];
 	} else {
-		t = [NSString stringWithString:@"-"];
-		tu = [NSString stringWithString:@""];
+		if (time >= 3600) {
+			t = [NSString stringWithFormat:@"%d:%02d", time/3600, time/60];
+			tu = [NSString stringWithString:@"h"];
+		} else if (time >= 60) {
+			t = [NSString stringWithFormat:@"%d:%02d", time/60, time % 60];
+			tu = [NSString stringWithString:@"m"];
+		} else {
+			t = [NSString stringWithFormat:@"%d", time];
+			tu = [NSString stringWithString:@"s"];
+		}
 	}
 	[_info setStringValue:[NSString
 stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
