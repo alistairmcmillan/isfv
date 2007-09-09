@@ -31,12 +31,13 @@
 	IBOutlet NSScrollView *_scroller;
 	IBOutlet NSTableView *_table;
 	IBOutlet NSTextField *_info;
-	//IBOutlet NSButton *
+	IBOutlet NSButton *_cancelButton;
 	ASSFVData *_data;
 	int _extendedHeight;
 }
 
 - (IBAction)showDetails:(id)sender;
+- (IBAction)cancelCheck:(id)sender;
 - (void) populateData: (ASSFVData*)data;
 - (void) updateData: (int)index percentCompleted:(float)percent;
 - (void) percentCompleted:(float)percent;

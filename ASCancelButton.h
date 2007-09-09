@@ -1,9 +1,9 @@
 //
-//  ASDocument.h
+//  ASCancelButton.h
 //  iSFV
 //
-//  Created by Albert Sodyl on 01/08/07.
-//  Copyright Eoros 2007 . All rights reserved.
+//  Imported from The Unarchiver 1.6 on 08/09/07.
+//  Copyright The Unarchiver Team, Albert Sodyl 2007 . All rights reserved.
 //
 
 //	iSFV is free software; you can redistribute it and/or modify
@@ -21,19 +21,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class ASWindowController;
-
-@interface ASDocument : NSDocument
+@interface ASCancelButton:NSButton
 {
-	ASWindowController *windowController;
-	ASSFVData *_data;
-	NSDate *_date;
-	long long _dataRead;
-	float _percentCompleted;
-	float _filePercentCompleted;
-	BOOL _threadShouldExit;
+	NSImage *normal,*hover,*press;
+	NSTrackingRectTag trackingtag;
 }
 
-- (void) cancelCheck;
+-(id)initWithCoder:(NSCoder *)coder;
+-(void)dealloc;
+-(void)mouseEntered:(NSEvent *)event;
+-(void)mouseExited:(NSEvent *)event;
 
 @end

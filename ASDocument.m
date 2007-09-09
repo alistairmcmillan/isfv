@@ -139,7 +139,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				crc = updateCRC(crc, buffer, localread);
 				totalread = totalread + localread;
 			}
-			_percentCompleted = (100.*((float)index+(totalread/filesize))/[_data count]);
+			_percentCompleted = (100.*((float)index+((float)totalread/filesize))
+								 /[_data count]);
 			_filePercentCompleted = (100.*totalread/filesize);
 			_dataRead += localread;
 		}
@@ -260,7 +261,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				status = ASSFVMatchCRC;
 			else {
 				status = ASSFVNotMatchCRC;
-				[windowController failedFile:YES];
+				if (!_threadShouldExit)
+					[windowController failedFile:YES];
 			}
 		}
 #ifdef DEBUG
@@ -284,10 +286,10 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				NSLog(@"CRITICAL ERROR: Should not get here.");
 		}
 #endif
-		[_data replaceStatusAtIndex:i with:status];
-		i++;
 		if (_threadShouldExit)
 			break;
+		[_data replaceStatusAtIndex:i with:status];
+		i++;
 	}
 	_percentCompleted = (100*(float)i/[_data count]);
 	[self performSelectorOnMainThread:@selector(updateData:)
@@ -295,6 +297,10 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 						waitUntilDone:YES];
 	_threadShouldExit = YES;
 	[pool release];
+}
+
+- (void) cancelCheck {
+	_threadShouldExit = YES;
 }
 
 - (void)parseSFV:(NSString *)fileContents {
