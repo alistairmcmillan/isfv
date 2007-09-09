@@ -107,7 +107,39 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	[self setInfoSpeed: -1 withTime: -1];
 }
 
+- (void)animation:(NSAnimation *)animation
+            didReachProgressMark:(NSAnimationProgress)progress {
+    if (animation)
+        [[self window] setAlphaValue:progress];
+}
+
+- (void)animationDidEnd:(NSAnimation*)animation {
+	if (animation)
+		[[self window] setAlphaValue:1.0];
+}
+
+- (NSAnimation *)initAnimationDirection:(BOOL)animIn {
+#define ANIMATION_COUNT 15
+	int i;
+	NSAnimationProgress progMarks[ANIMATION_COUNT];
+	for (i = 0; i < ANIMATION_COUNT; i++) {
+		progMarks[i] = (animIn ? (float) i/ANIMATION_COUNT :
+						(float) 1 - i/ANIMATION_COUNT);
+	}
+	NSAnimation* animation = [[NSAnimation alloc] init];
+	[animation initWithDuration:0.5 animationCurve:NSAnimationLinear];
+	[animation setFrameRate:30.0];
+	[animation setAnimationBlockingMode:NSAnimationNonblocking];
+	[animation setDelegate:self];
+	for (i = 0; i < ANIMATION_COUNT; i++)
+        [animation addProgressMark:progMarks[i]];
+	return animation;
+}
+
 - (void)showWindow:(id)sender {
+	NSAnimation* animation = [self initAnimationDirection:YES];
+	[[self window] setAlphaValue:0.0];
+	[animation startAnimation];
 	[super showWindow:sender];
 	[[self document] windowControllerDidLoadNib:self];
 }
