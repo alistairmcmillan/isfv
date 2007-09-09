@@ -117,7 +117,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 - (long) getFileCRC:(NSString *)filename atIndex:(int)index
 {
 	unsigned long crc = 0xffffffff;
-	FILE *f;
+	int f;
 	long long totalread = 0;
 	long long localread;
 	long long filesize;
@@ -131,11 +131,11 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 #define BUFFERSIZE 65536*16*8
 	char *buffer = malloc(BUFFERSIZE*sizeof(char)); 
 	
-	if ((f = fopen([filename UTF8String], "rb")) != NULL) {
+	if ((f = open([filename UTF8String], O_RDONLY, 0)) >= 0) {
 		stat([filename UTF8String], &stbuf);
 		filesize = stbuf.st_size;
 		do {
-			if ((localread = fread(buffer, 1, BUFFERSIZE, f))) {
+			if ((localread = read(f, buffer, BUFFERSIZE))) {
 				crc = updateCRC(crc, buffer, localread);
 				totalread = totalread + localread;
 			}
@@ -145,7 +145,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			_dataRead += localread;
 		}
 		while (localread > 0 && !_threadShouldExit);
-		fclose(f);
+		close(f);
 
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
