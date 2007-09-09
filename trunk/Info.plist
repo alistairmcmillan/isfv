@@ -33,6 +33,8 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleGetInfoString</key>
+	<string>iSFV 0.2; Copyright © 2007, Albert Sodyl</string>
 	<key>CFBundleIconFile</key>
 	<string>iSFV.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -46,7 +48,7 @@
 	<key>CFBundleSignature</key>
 	<string>iSFV</string>
 	<key>CFBundleVersion</key>
-	<string>0.01</string>
+	<string>0.2</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
