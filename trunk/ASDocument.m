@@ -128,7 +128,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	 * different performance depending on system, so feel
 	 * free to modify.
 	 */
-#define BUFFERSIZE 65536*16*8
+#define BUFFERSIZE 65536*16
 	char *buffer = malloc(BUFFERSIZE*sizeof(char)); 
 	
 	if ((f = open([filename UTF8String], O_RDONLY, 0)) >= 0) {
