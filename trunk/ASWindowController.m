@@ -45,8 +45,36 @@
 }
 
 - (void) filePercentCompleted:(float)p {
-	NSString* s = [NSString stringWithFormat:@"%1.1f%%", p];
+	NSString* s = [NSString stringWithFormat:@"%.0f%%", p];
 	[_percentage setStringValue:s];
+}
+
+- (void) setInfoSpeed: (int)speed withTime: (int)time {
+	NSString *s, *su, *t, *tu;
+	if(speed < 0) {
+		s = [NSString stringWithString:@"-"];
+		su = [NSString stringWithString:@""];
+	} else {
+		if (speed >= 1024*1024) {
+			s = [NSString stringWithFormat:@"%.2f", (float) speed / (1024*1024)];
+			su = [NSString stringWithString:@"MiB/s"];
+		} else if (speed >= 10*1024) {
+			s = [NSString stringWithFormat:@"%.1f", (float) speed / (1024)];
+			su = [NSString stringWithString:@"KiB/s"];
+		} else {
+			s = [NSString stringWithFormat:@"%d", speed];
+			su = [NSString stringWithString:@"B/s"];
+		}
+	}
+	if (time < 0) {
+		t = [NSString stringWithString:@"-"];
+		tu = [NSString stringWithString:@""];
+	} else {
+		t = [NSString stringWithString:@"-"];
+		tu = [NSString stringWithString:@""];
+	}
+	[_info setStringValue:[NSString
+stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void)windowDidLoad {
@@ -67,6 +95,7 @@
 	[_level setEnabled:NO];
 	_extendedHeight = 150;
 	[_table setDataSource:_data];
+	[self setInfoSpeed: -1 withTime: -1];
 }
 
 - (void)showWindow:(id)sender {
@@ -82,10 +111,13 @@
 }
 
 - (void) warningFile:(BOOL)warning {
-	if(warning)
+	if(warning) {
+		[_level setCriticalValue:101];
 		[_level setWarningValue:0.00001];
-	else
+	}
+	else {
 		[_level setWarningValue:0];
+	}
 }
 
 - (IBAction)showDetails:(id)sender {
@@ -102,6 +134,8 @@
 		[[self window] setFrame:currentRect display:YES animate:YES];
 		[_scroller setFrame:NSMakeRect(20,20,currentRect.size.width-40,_extendedHeight-10)];
 		[_scroller setHidden:NO];
+		[_info setFrame:NSMakeRect(20,4,currentRect.size.width-40,14)];
+		[_info setHidden:NO];
 	}
 	else { // Collapse window
 		_extendedHeight = [[self window] contentRectForFrameRect:currentRect]
@@ -110,6 +144,7 @@
 		currentRect.size.height -= _extendedHeight;
 		[[self window] setContentMaxSize:NSMakeSize(currentMaxSize.width,WMAX_HEIGHT)];
 		[[self window] setContentMinSize:NSMakeSize(currentMinSize.width,WMAX_HEIGHT)];
+		[_info setHidden:YES];
 		[_scroller setHidden:YES];
 		[[self window] setFrame:currentRect display:YES animate:YES];
 	}

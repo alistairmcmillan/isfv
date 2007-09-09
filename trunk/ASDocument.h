@@ -25,5 +25,10 @@
 {
 	ASWindowController *windowController;
 	ASSFVData *_data;
+	NSDate *_date;
+	long _dataRead;
+	float _percentCompleted;
+	float _filePercentCompleted;
+	BOOL _threadShouldExit;
 }
 @end
