@@ -31,6 +31,7 @@
 	IBOutlet NSScrollView *_scroller;
 	IBOutlet NSTableView *_table;
 	IBOutlet NSTextField *_info;
+	//IBOutlet NSButton *
 	ASSFVData *_data;
 	int _extendedHeight;
 }

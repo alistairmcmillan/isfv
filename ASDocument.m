@@ -118,9 +118,9 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 {
 	unsigned long crc = 0xffffffff;
 	FILE *f;
-	long totalread = 0;
-	long localread;
-	long filesize;
+	long long totalread = 0;
+	long long localread;
+	long long filesize;
 	struct stat stbuf;
 	
 	/*
@@ -141,11 +141,11 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			}
 			_percentCompleted = (100.*((float)index+(totalread/filesize))/[_data count]);
 			_filePercentCompleted = (100.*totalread/filesize);
-			_dataRead += totalread;
+			_dataRead += localread;
 		}
 		while (localread > 0 && !_threadShouldExit);
 		fclose(f);
-				
+
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
 		
@@ -177,8 +177,20 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	if (!_threadShouldExit) {
 		[windowController percentCompleted:_percentCompleted];
 		[windowController filePercentCompleted:_filePercentCompleted];
-		[windowController setInfoSpeed:(int)(_dataRead/(-[_date timeIntervalSinceNow]))
-							  withTime:0];
+		//if (!((long long)[NSDate timeIntervalSinceReferenceDate] % 5))
+
+	} else {
+		[timer invalidate];
+	}
+}
+
+- (void) handleTimerInfo:(NSTimer *)timer
+{
+	if (!_threadShouldExit) {
+		[windowController setInfoSpeed:(int)(_dataRead
+											 /(-[_date timeIntervalSinceNow]))
+							  withTime:(-[_date timeIntervalSinceNow])
+			/(_percentCompleted/100)+[_date timeIntervalSinceNow]];
 	} else {
 		[timer invalidate];
 	}
@@ -190,7 +202,13 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 													selector:@selector(handleTimer:)
 													userInfo:nil
 													 repeats:YES];
+	NSTimer *timerInfo = [NSTimer scheduledTimerWithTimeInterval:5
+														  target:self
+														selector:@selector(handleTimerInfo:)
+														userInfo:nil
+														 repeats:YES];
 	[timer userInfo];
+	[timerInfo userInfo];
 }
 
 - (void) updateData: (NSNumber *)index {
