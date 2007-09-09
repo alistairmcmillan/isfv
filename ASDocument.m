@@ -290,9 +290,10 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		i++;
 	}
 	_percentCompleted = (100*(float)i/[_data count]);
-	[self performSelectorOnMainThread:@selector(updateData:)
-						   withObject:[NSNumber numberWithInt:(i-1)]
-						waitUntilDone:YES];
+	if (!_threadShouldExit)
+		[self performSelectorOnMainThread:@selector(updateData:)
+							   withObject:[NSNumber numberWithInt:(i-1)]
+							waitUntilDone:YES];
 	_threadShouldExit = YES;
 	_threadMutex = NO;
 	[pool release];
