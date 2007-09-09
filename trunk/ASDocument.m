@@ -310,7 +310,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	NSString *line, *gLine;
 	int i = 0;
 	NSEnumerator *e = [lines objectEnumerator];
-	while (line = [e nextObject]) {
+	while ((line = [e nextObject])) {
 		gLine = [line stringByTrimmingCharactersInSet:
 			[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		if ([gLine length] > 8 && [gLine characterAtIndex:0] != ';'
