@@ -1,12 +1,14 @@
 {
     IBClasses = (
+        {CLASS = ASCancelButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
         {CLASS = ASDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
         {
-            ACTIONS = {showDetails = id; }; 
+            ACTIONS = {cancelCheck = id; showDetails = id; }; 
             CLASS = ASWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_arrow" = NSButton; 
+                "_cancelButton" = NSButton; 
                 "_details" = NSTextField; 
                 "_info" = NSTextField; 
                 "_level" = NSLevelIndicator; 

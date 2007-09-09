@@ -20,6 +20,7 @@
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "ASSFVData.h"
+#import "ASDocument.h"
 #import "ASWindowController.h"
 
 #define WMAX_HEIGHT 100
@@ -156,6 +157,10 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 		[_scroller setHidden:YES];
 		[[self window] setFrame:currentRect display:YES animate:YES];
 	}
+}
+
+- (IBAction)cancelCheck:(id)sender {
+	[[self document] cancelCheck];
 }
 
 @end
