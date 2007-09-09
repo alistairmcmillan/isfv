@@ -32,6 +32,7 @@
 	float _percentCompleted;
 	float _filePercentCompleted;
 	BOOL _threadShouldExit;
+	BOOL _threadMutex;
 }
 
 - (void) cancelCheck;

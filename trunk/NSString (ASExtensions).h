@@ -21,7 +21,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface NSString (ASExtensions)
 
 - (int) indexOfLastCharacter:(char)character;

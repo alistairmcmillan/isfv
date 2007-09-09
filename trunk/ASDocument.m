@@ -178,8 +178,6 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	if (!_threadShouldExit) {
 		[windowController percentCompleted:_percentCompleted];
 		[windowController filePercentCompleted:_filePercentCompleted];
-		//if (!((long long)[NSDate timeIntervalSinceReferenceDate] % 5))
-
 	} else {
 		[timer invalidate];
 	}
@@ -296,6 +294,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 						   withObject:[NSNumber numberWithInt:(i-1)]
 						waitUntilDone:YES];
 	_threadShouldExit = YES;
+	_threadMutex = NO;
 	[pool release];
 }
 
@@ -311,7 +310,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	int i = 0;
 	NSEnumerator *e = [lines objectEnumerator];
 	while (line = [e nextObject]) {
-		gLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		gLine = [line stringByTrimmingCharactersInSet:
+			[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		if ([gLine length] > 8 && [gLine characterAtIndex:0] != ';'
 			&& [gLine characterAtIndex:0] != '#') {
 			i = [gLine indexOfLastCharacter:' '];
@@ -326,7 +326,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     BOOL readSuccess = NO;
-    NSString *fileContents = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *fileContents = [[NSString alloc] initWithData:data
+												   encoding:NSUTF8StringEncoding];
     if (fileContents) {
         readSuccess = YES;
 		[self parseSFV:fileContents];
@@ -337,8 +338,11 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (void) windowControllerDidLoadNib:(id)sender {
 	_threadShouldExit = NO;
-	[NSThread detachNewThreadSelector: @selector(verifySFV:)
-							 toTarget: self withObject: nil];
+	if (!_threadMutex) {
+		_threadMutex = YES;
+		[NSThread detachNewThreadSelector: @selector(verifySFV:)
+								 toTarget: self withObject: nil];
+	}
 }
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {

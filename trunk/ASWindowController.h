@@ -21,7 +21,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface ASWindowController : NSWindowController {
 	IBOutlet NSTextField *_status;
 	IBOutlet NSTextField *_percentage;
