@@ -1,0 +1,9 @@
+iSVF Changelist
+---------------
+
+Version 0.2 - September 19, 2007
+* Fixed many bugs
+* Increased UI performance
+* Doubled verification performance
+* Added speed and time remaining indicators
+* Stability enhancements
