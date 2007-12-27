@@ -1,0 +1,20 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {miscChanged = id; showPanel = id; }; 
+            CLASS = ASPreferenceController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                closeWindow = id; 
+                datesTimes = id; 
+                detailMode = id; 
+                panel = id; 
+                sfvFormat = id; 
+                timeToClose = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
