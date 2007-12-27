@@ -20,6 +20,7 @@
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "ASSFVData.h"
+#import "ASPreferenceController.h"
 #import "ASDocument.h"
 #import "ASWindowController.h"
 
@@ -86,6 +87,11 @@
 stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
+//- (void)awakeFromNib;
+//{
+//	[self setWindowFrameAutosaveName: @"iSFV Window"];
+//}
+
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	if ([_data count] > 0) {
@@ -105,31 +111,35 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	_extendedHeight = 150;
 	[_table setDataSource:_data];
 	[self setInfoSpeed: -1 withTime: -1];
+	if([[ASPreferenceController objectForKey:DetailMode] boolValue]) {
+		[_arrow setState:NSOnState];
+		[self showDetails:_arrow];
+	}
 }
 
 - (void)animation:(NSAnimation *)animation
             didReachProgressMark:(NSAnimationProgress)progress {
     if (animation)
-        [[self window] setAlphaValue:progress];
+        [[self window] setAlphaValue:_fadeIn ? progress : 1. - progress];
 }
 
 - (void)animationDidEnd:(NSAnimation*)animation {
-	if (animation)
+	if (animation && _fadeIn)
 		[[self window] setAlphaValue:1.0];
 }
 
-- (NSAnimation *)initAnimationDirection:(BOOL)animIn {
-#define ANIMATION_COUNT 15
+- (NSAnimation *)initAnimationWithFrameRate:(float)fps duration:(float)seconds
+									   mode:(NSAnimationBlockingMode)mode {
+#define ANIMATION_COUNT (int)ceil(fps*seconds)
 	int i;
 	NSAnimationProgress progMarks[ANIMATION_COUNT];
 	for (i = 0; i < ANIMATION_COUNT; i++) {
-		progMarks[i] = (animIn ? (float) i/ANIMATION_COUNT :
-						(float) 1 - i/ANIMATION_COUNT);
+		progMarks[i] = (float) i/ANIMATION_COUNT;
 	}
 	NSAnimation* animation = [[NSAnimation alloc] init];
-	[animation initWithDuration:0.5 animationCurve:NSAnimationLinear];
-	[animation setFrameRate:30.0];
-	[animation setAnimationBlockingMode:NSAnimationNonblocking];
+	[animation initWithDuration:seconds animationCurve:NSAnimationLinear];
+	[animation setFrameRate:fps];
+	[animation setAnimationBlockingMode:mode];
 	[animation setDelegate:self];
 	for (i = 0; i < ANIMATION_COUNT; i++)
         [animation addProgressMark:progMarks[i]];
@@ -137,10 +147,14 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void)showWindow:(id)sender {
-	NSAnimation* animation = [self initAnimationDirection:YES];
+	if((_animation && [_animation isAnimating]) || (_timer && [_timer isValid]))
+		return;
+	_fadeIn = YES;
+	_animation = [self initAnimationWithFrameRate:30 duration:0.5
+													 mode:NSAnimationNonblocking];
 	[[self window] setAlphaValue:0.0];
-	[animation startAnimation];
 	[super showWindow:sender];
+	[_animation startAnimation];
 	[[self document] windowControllerDidLoadNib:self];
 }
 
@@ -193,6 +207,25 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 
 - (IBAction)cancelCheck:(id)sender {
 	[[self document] cancelCheck];
+}
+
+- (void) handleTimerClose:(NSTimer *)timer
+{
+	[[self window] performClose:self];
+}
+
+- (void) closeWindow {
+	if((_animation && [_animation isAnimating]) || (_timer && [_timer isValid]))
+		return;
+	_fadeIn = NO;
+	_animation = [self initAnimationWithFrameRate:15 duration:3
+													 mode:NSAnimationNonblocking];
+	[_animation startAnimation];
+	_timer = [NSTimer scheduledTimerWithTimeInterval:3
+													  target:self
+													selector:@selector(handleTimerClose:)
+													userInfo:nil
+													 repeats:NO];
 }
 
 @end

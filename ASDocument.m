@@ -20,8 +20,10 @@
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <sys/stat.h>
+#import <unistd.h>
 #import "NSString (ASExtensions).h"
 #import "ASSFVData.h"
+#import "ASPreferenceController.h"
 #import "ASWindowController.h"
 #import "ASDocument.h"
 
@@ -195,6 +197,11 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	}
 }
 
+- (void) handleTimerClose:(NSTimer *)timer
+{
+	[windowController closeWindow];
+}
+
 - (void) updateGUIEnable {
 	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1
 													  target:self
@@ -212,6 +219,15 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (void) updateData: (NSNumber *)index {
 	[windowController updateData:[index intValue] percentCompleted:_percentCompleted];
+}
+
+- (void) closeDocument: (NSNumber *)seconds {
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[seconds intValue]
+													  target:self
+													selector:@selector(handleTimerClose:)
+													userInfo:nil
+													 repeats:NO];
+	[timer userInfo]; // To stop unused warnings?
 }
 
 - (void)verifySFV:(id)object {
@@ -290,10 +306,16 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		i++;
 	}
 	_percentCompleted = (100*(float)i/[_data count]);
-	if (!_threadShouldExit)
+	if (!_threadShouldExit) {
 		[self performSelectorOnMainThread:@selector(updateData:)
 							   withObject:[NSNumber numberWithInt:(i-1)]
 							waitUntilDone:YES];
+		if([[ASPreferenceController objectForKey:CloseWindow] boolValue] && [_data isAllOkay])
+			[self performSelectorOnMainThread:@selector(closeDocument:)
+								   withObject:[ASPreferenceController objectForKey:
+									   CloseTime]
+								waitUntilDone:YES];
+	}
 	_threadShouldExit = YES;
 	_threadMutex = NO;
 	[pool release];

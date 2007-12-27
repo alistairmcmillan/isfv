@@ -20,6 +20,7 @@
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "ASAppController.h"
+#import "ASPreferenceController.h"
 
 @implementation ASAppController
 
@@ -28,15 +29,8 @@
     return NO;
 }
 
-//- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
-//{
-//    NSDocumentController *dc;
-//    id doc;
-//	
-//    dc = [NSDocumentController sharedDocumentController];
-//    doc = [dc openDocumentWithContentsOfFile:filename display:YES];
-//	
-//    return ( doc != nil);
-//}
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    [ASPreferenceController saveDefaults];
+}
 
 @end
