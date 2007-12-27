@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		50001B1C0D231DAD008EF652 /* ASPreferenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50001B1B0D231DAD008EF652 /* ASPreferenceController.m */; };
+		50001B7C0D232A33008EF652 /* ASPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 50001B7A0D232A33008EF652 /* ASPreferences.nib */; };
 		5008E01A0C939EE600E89D9B /* ASCancelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E0190C939EE600E89D9B /* ASCancelButton.m */; };
 		5008E01E0C939F9700E89D9B /* close_hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E01B0C939F9700E89D9B /* close_hover.png */; };
 		5008E01F0C939F9700E89D9B /* close_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E01C0C939F9700E89D9B /* close_normal.png */; };
@@ -39,6 +41,9 @@
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* iSFV_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iSFV_Prefix.pch; sourceTree = "<group>"; };
+		50001B1A0D231DAD008EF652 /* ASPreferenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPreferenceController.h; sourceTree = "<group>"; };
+		50001B1B0D231DAD008EF652 /* ASPreferenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPreferenceController.m; sourceTree = "<group>"; };
+		50001B7B0D232A33008EF652 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ASPreferences.nib; sourceTree = "<group>"; };
 		5008E0180C939EE600E89D9B /* ASCancelButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASCancelButton.h; sourceTree = "<group>"; };
 		5008E0190C939EE600E89D9B /* ASCancelButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ASCancelButton.m; sourceTree = "<group>"; };
 		5008E01B0C939F9700E89D9B /* close_hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_hover.png; sourceTree = "<group>"; };
@@ -57,7 +62,7 @@
 		50C3AEF50C681D1D00B1C997 /* ASSFVData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSFVData.h; sourceTree = "<group>"; };
 		50C3AEF60C681D1D00B1C997 /* ASSFVData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSFVData.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* iSFV.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iSFV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* iSFV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSFV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +132,8 @@
 				507B19960C67F04500343AC0 /* ASWindowController.m */,
 				507D7F7C0C684DA7002D0607 /* ASAppController.h */,
 				507D7F7D0C684DA7002D0607 /* ASAppController.m */,
+				50001B1A0D231DAD008EF652 /* ASPreferenceController.h */,
+				50001B1B0D231DAD008EF652 /* ASPreferenceController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -153,6 +160,7 @@
 				2A37F4B4FDCFA73011CA2CEA /* ASDocument.nib */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				50001B7A0D232A33008EF652 /* ASPreferences.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -216,6 +224,7 @@
 				5008E01E0C939F9700E89D9B /* close_hover.png in Resources */,
 				5008E01F0C939F9700E89D9B /* close_normal.png in Resources */,
 				5008E0200C939F9700E89D9B /* close_press.png in Resources */,
+				50001B7C0D232A33008EF652 /* ASPreferences.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +242,7 @@
 				50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */,
 				507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */,
 				5008E01A0C939EE600E89D9B /* ASCancelButton.m in Sources */,
+				50001B1C0D231DAD008EF652 /* ASPreferenceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +279,14 @@
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 			);
 			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		50001B7A0D232A33008EF652 /* ASPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				50001B7B0D232A33008EF652 /* English */,
+			);
+			name = ASPreferences.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -130,6 +130,15 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	[_statuses replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:status]];
 }
 
+- (BOOL) isAllOkay {
+	NSEnumerator *enumerator = [self statusesEnumerator];
+	id status;
+	while((status = [enumerator nextObject]))
+		if ([status intValue] != ASSFVMatchCRC)
+			return NO;
+	return YES;
+}
+
 - (NSEnumerator*) filesEnumerator {
 	return [_files objectEnumerator];
 }

@@ -33,6 +33,9 @@
 	IBOutlet NSButton *_cancelButton;
 	ASSFVData *_data;
 	int _extendedHeight;
+	BOOL _fadeIn;
+	NSAnimation *_animation;
+	NSTimer *_timer;
 }
 
 - (IBAction)showDetails:(id)sender;
@@ -44,5 +47,6 @@
 - (void) failedFile:(BOOL)failed;
 - (void) warningFile:(BOOL)warning;
 - (void) setInfoSpeed: (int)speed withTime: (int)time;
+- (void) closeWindow;
 
 @end
