@@ -91,7 +91,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 //{
 //	[self setWindowFrameAutosaveName: @"iSFV Window"];
 //}
-
+	
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	if ([_data count] > 0) {
@@ -124,8 +124,12 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void)animationDidEnd:(NSAnimation*)animation {
-	if (animation && _fadeIn)
-		[[self window] setAlphaValue:1.0];
+	if(animation) {
+		if (_fadeIn)
+			[[self window] setAlphaValue:1.0];
+		else
+			[[self window] performClose:self];
+	}
 }
 
 - (NSAnimation *)initAnimationWithFrameRate:(float)fps duration:(float)seconds
@@ -147,11 +151,11 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void)showWindow:(id)sender {
-	if((_animation && [_animation isAnimating]) || (_timer && [_timer isValid]))
+	if(_animation && [_animation isAnimating])
 		return;
 	_fadeIn = YES;
 	_animation = [self initAnimationWithFrameRate:30 duration:0.5
-													 mode:NSAnimationNonblocking];
+											 mode:NSAnimationNonblocking];
 	[[self window] setAlphaValue:0.0];
 	[super showWindow:sender];
 	[_animation startAnimation];
@@ -194,7 +198,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	}
 	else { // Collapse window
 		_extendedHeight = [[self window] contentRectForFrameRect:currentRect]
-			.size.height - WMAX_HEIGHT;
+		.size.height - WMAX_HEIGHT;
 		currentRect.origin.y += _extendedHeight;
 		currentRect.size.height -= _extendedHeight;
 		[[self window] setContentMaxSize:NSMakeSize(currentMaxSize.width,WMAX_HEIGHT)];
@@ -209,23 +213,13 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	[[self document] cancelCheck];
 }
 
-- (void) handleTimerClose:(NSTimer *)timer
-{
-	[[self window] performClose:self];
-}
-
 - (void) closeWindow {
-	if((_animation && [_animation isAnimating]) || (_timer && [_timer isValid]))
+	if(_animation && [_animation isAnimating])
 		return;
 	_fadeIn = NO;
 	_animation = [self initAnimationWithFrameRate:15 duration:3
-													 mode:NSAnimationNonblocking];
+											 mode:NSAnimationNonblocking];
 	[_animation startAnimation];
-	_timer = [NSTimer scheduledTimerWithTimeInterval:3
-													  target:self
-													selector:@selector(handleTimerClose:)
-													userInfo:nil
-													 repeats:NO];
 }
 
 @end
