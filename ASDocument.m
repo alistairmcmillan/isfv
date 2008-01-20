@@ -191,7 +191,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		[windowController setInfoSpeed:(int)(_dataRead
 											 /(-[_date timeIntervalSinceNow]))
 							  withTime:(-[_date timeIntervalSinceNow])
-			/(_percentCompleted/100)+[_date timeIntervalSinceNow]];
+			/(_percentCompleted/100)+[_date timeIntervalSinceNow]
+								isDone:NO];
 	} else {
 		[timer invalidate];
 	}
@@ -219,6 +220,14 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (void) updateData: (NSNumber *)index {
 	[windowController updateData:[index intValue] percentCompleted:_percentCompleted];
+}
+
+- (void) finishChecking: (NSNumber *)index {
+	[self updateData:index];
+	[windowController setInfoSpeed:(int)(_dataRead
+										 /(-[_date timeIntervalSinceNow]))
+						  withTime:(-[_date timeIntervalSinceNow])
+							isDone:YES];
 }
 
 - (void) closeDocument: (NSNumber *)seconds {
@@ -307,7 +316,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	}
 	_percentCompleted = (100*(float)i/[_data count]);
 	if (!_threadShouldExit) {
-		[self performSelectorOnMainThread:@selector(updateData:)
+		[self performSelectorOnMainThread:@selector(finishChecking:)
 							   withObject:[NSNumber numberWithInt:(i-1)]
 							waitUntilDone:YES];
 		if([[ASPreferenceController objectForKey:CloseWindow] boolValue] && [_data isAllOkay])
@@ -355,17 +364,14 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
         readSuccess = YES;
 		[self parseSFV:fileContents];
         [fileContents release];
+		_threadShouldExit = NO;
+		if (!_threadMutex) {
+			_threadMutex = YES;
+			[NSThread detachNewThreadSelector: @selector(verifySFV:)
+									 toTarget: self withObject: nil];
+		}		
     }
     return readSuccess;
-}
-
-- (void) windowControllerDidLoadNib:(id)sender {
-	_threadShouldExit = NO;
-	if (!_threadMutex) {
-		_threadMutex = YES;
-		[NSThread detachNewThreadSelector: @selector(verifySFV:)
-								 toTarget: self withObject: nil];
-	}
 }
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {

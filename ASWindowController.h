@@ -46,7 +46,7 @@
 - (void) filePercentCompleted:(float)percent;
 - (void) failedFile:(BOOL)failed;
 - (void) warningFile:(BOOL)warning;
-- (void) setInfoSpeed: (int)speed withTime: (int)time;
+- (void) setInfoSpeed: (int)speed withTime: (int)time isDone: (BOOL)done;
 - (void) closeWindow;
 
 @end
