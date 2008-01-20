@@ -39,7 +39,7 @@
 		_date = [[NSDate alloc] init];
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
-    
+		[_data setDelegate:self];
     }
     return self;
 }
@@ -222,6 +222,18 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	[windowController updateData:[index intValue] percentCompleted:_percentCompleted];
 }
 
+- (void)document:(NSDocument *)doc didSave:(BOOL)didSave contextInfo:(void *)contextInfo {
+	
+}
+
+- (NSString*) documentPath {
+	if(![self fileURL])
+		[self saveDocumentWithDelegate:self
+					   didSaveSelector:@selector(document:didSave:contextInfo:)
+						   contextInfo:nil];
+	return [[[self fileURL] relativePath] stringByDeletingLastPathComponent];
+}
+
 - (void) finishChecking: (NSNumber *)index {
 	[self updateData:index];
 	[windowController setInfoSpeed:(int)(_dataRead
@@ -266,7 +278,6 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		[self performSelectorOnMainThread:@selector(updateData:)
 							   withObject:[NSNumber numberWithInt:i]
 							waitUntilDone:NO];
-		filePath = [sfvPath stringByAppendingString:file];
 		filePath = [self autoCorrectPath:sfvPath ofFile:file];
 		if (![fileMan fileExistsAtPath:filePath]) {
 			status = ASSFVMissing;
@@ -305,6 +316,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 				break;
 			case ASSFVUnknownError:
 				NSLog(@"%@ - Unknown Error", file);
+				break;
 			default:
 				NSLog(@"CRITICAL ERROR: Should not get here.");
 		}

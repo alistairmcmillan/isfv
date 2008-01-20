@@ -34,6 +34,7 @@ typedef enum _ASSFVStatus {
 	NSMutableArray *_files;
 	NSMutableArray *_checkSums;
 	NSMutableArray *_statuses;
+	id _delegate;
 }
 
 - (int) count;
@@ -42,10 +43,14 @@ typedef enum _ASSFVStatus {
 - (id) checkSumAtIndex:(int)index;
 - (id) statusAtIndex:(int)index;
 - (void) replaceStatusAtIndex:(int)i with:(ASSFVStatus)status;
-- (void) addFile:(NSString*)fileName atIndex:(int)index;
+- (void) addFile:(NSString*)fileName atIndex:(int)index atPath:(NSString*)path;
 - (BOOL) isAllOkay;
 - (NSEnumerator*) filesEnumerator;
 - (NSEnumerator*) checkSumsEnumerator;
 - (NSEnumerator*) statusesEnumerator;
+
+- (id)delegate;
+- (void)setDelegate:(id)newDelegate;
+- (NSString*)path;
 
 @end

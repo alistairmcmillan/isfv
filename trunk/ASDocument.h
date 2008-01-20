@@ -38,3 +38,7 @@
 - (void) cancelCheck;
 
 @end
+
+@interface NSObject (ASSFVData)
+- (NSString*) documentPath;
+@end

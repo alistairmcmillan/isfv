@@ -24,5 +24,6 @@
 @interface NSString (ASExtensions)
 
 - (int) indexOfLastCharacter:(char)character;
+- (BOOL) isChildOfDirectory:(NSString*)directory;
 
 @end
