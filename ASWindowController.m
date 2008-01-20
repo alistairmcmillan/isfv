@@ -165,6 +165,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	}
 	[super showWindow:sender];
 	[[self document] windowControllerDidLoadNib:self];
+	[_data path];
 }
 
 - (void) failedFile:(BOOL)failed {

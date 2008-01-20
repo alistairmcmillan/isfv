@@ -33,4 +33,24 @@
 	return -1;
 }
 
+- (BOOL) isChildOfDirectory:(NSString*)directory {
+	BOOL result = nil;
+	NSArray *directoryComponents = [directory pathComponents];
+	NSArray *selfComponents = [self pathComponents];
+	NSEnumerator *de = [directoryComponents objectEnumerator];
+	NSEnumerator *se = [selfComponents objectEnumerator];
+	NSString *dc = [de nextObject];
+	NSString *sc;
+	if(dc) {
+		result = YES;
+		do {
+			if(!(sc = [se nextObject]) || ![dc isEqual:sc]) {
+				result = NO;
+				break;
+			}
+		} while ((dc = [de nextObject]));
+	}
+	return result;
+}
+
 @end

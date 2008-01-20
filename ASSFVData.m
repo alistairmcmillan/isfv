@@ -19,7 +19,9 @@
 //	You should have received a copy of the GNU General Public License
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#import "NSString (ASExtensions).h"
 #import "ASSFVData.h"
+#import "ASDocument.h"
 
 
 @implementation ASSFVData
@@ -119,12 +121,12 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 				 proposedRow:(int)row
 	   proposedDropOperation:(NSTableViewDropOperation)op {
     //[tv setDropRow: -1 dropOperation: NSTableViewDropOn];
-    NSLog(@"validate Drop");
     return NSDragOperationEvery;
 }
 
 - (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
 			  row:(int)row dropOperation:(NSTableViewDropOperation)operation {
+	BOOL result = NO;
 	if(row < 0)
 		row = 0;
     NSPasteboard* pboard = [info draggingPasteboard];
@@ -132,28 +134,37 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
     //NSLog(@"file: %@", files);
 	NSEnumerator *e = [files objectEnumerator];
 	NSString *file;
-	while((file = [e nextObject])) {
-		NSFileManager *fileMan = [NSFileManager defaultManager];
-		BOOL isDir;
-		if (![fileMan fileExistsAtPath:file isDirectory:&isDir] && isDir) {
-			int len = [file length];
-			NSDirectoryEnumerator *dirEnum = [fileMan enumeratorAtPath:file];
-			NSString *f;
-			while ((f = [dirEnum nextObject])) {
-				[self addFile:[f substringFromIndex:len] atIndex:row];
+	NSString *path = [self path];
+	if (path) {
+		while((file = [e nextObject])) {
+			NSFileManager *fileMan = [NSFileManager defaultManager];
+			BOOL isDir;
+			if ([fileMan fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+				NSDirectoryEnumerator *dirEnum = [fileMan enumeratorAtPath:file];
+				NSString *f;
+				while ((f = [dirEnum nextObject])) {
+					if ([fileMan fileExistsAtPath:[file stringByAppendingPathComponent:f]
+									  isDirectory:&isDir] && !isDir)
+						[self addFile:[file stringByAppendingPathComponent:f]
+							  atIndex:row atPath:path];
+				}
+			} else {
+				[self addFile:file atIndex:row atPath:path];
 			}
-		} else {
-			[self addFile:file atIndex:row];
 		}
+		[aTableView reloadData];
+		result = YES;
 	}
-	[aTableView reloadData];
-	return YES;
+	return result;
 }
 
-- (void) addFile:(NSString *)fileName atIndex:(int)index {
-	[_files insertObject:fileName atIndex:index];
-	[_checkSums insertObject:@"" atIndex:index];
-	[_statuses insertObject:[NSNumber numberWithInt:ASSFVNotChecked] atIndex:index];
+- (void) addFile:(NSString *)fileName atIndex:(int)index atPath:(NSString*)path {
+	if([fileName isChildOfDirectory:path]) {
+		fileName = [fileName substringFromIndex:[path length]+1];
+		[_files insertObject:fileName atIndex:index];
+		[_checkSums insertObject:@"" atIndex:index];
+		[_statuses insertObject:[NSNumber numberWithInt:ASSFVNotChecked] atIndex:index];
+	}
 }
 
 - (int) numberOfRowsInTableView:(NSTableView *)aTableView {
@@ -200,6 +211,21 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 
 - (NSEnumerator*) statusesEnumerator {
 	return [_statuses objectEnumerator];
+}
+
+- (id)delegate {
+    return _delegate;
+}
+
+- (void)setDelegate:(id)newDelegate {
+    _delegate = newDelegate;
+}
+
+- (NSString*)path {
+	NSString* result = nil;
+	if ( [_delegate respondsToSelector:@selector(documentPath)] )
+		(result = [_delegate documentPath]);
+	return result;
 }
 
 @end

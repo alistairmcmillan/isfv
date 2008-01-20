@@ -1,3 +1,4 @@
+* Update paths if doing Save As...
 * Fix re-opening a document with progress bar yellow/red
 * Save window sizes
 * Bottom right status of OK: #, Not OK: #
