@@ -51,7 +51,7 @@
 	[_percentage setStringValue:s];
 }
 
-- (void) setInfoSpeed: (int)speed withTime: (int)time {
+- (void) setInfoSpeed: (int)speed withTime: (int)time isDone: (BOOL)done {
 	NSString *s, *su, *t, *tu;
 	if(speed < 0) {
 		s = [NSString stringWithString:@"-"];
@@ -83,15 +83,19 @@
 			tu = [NSString stringWithString:@"s"];
 		}
 	}
+	if(done)
+		[_info setStringValue:[NSString
+stringWithFormat:@"Speed: %@ %@  Total Time: %@ %@", s, su, t, tu]];
+	else
 	[_info setStringValue:[NSString
 stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
-//- (void)awakeFromNib;
+//- (void)awakeFromNib
 //{
 //	[self setWindowFrameAutosaveName: @"iSFV Window"];
 //}
-	
+
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	if ([_data count] > 0) {
@@ -110,7 +114,8 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	[_level setEnabled:NO];
 	_extendedHeight = 150;
 	[_table setDataSource:_data];
-	[self setInfoSpeed: -1 withTime: -1];
+	[_table registerForDraggedTypes: [NSArray arrayWithObject:NSFilenamesPboardType]];
+	[self setInfoSpeed: -1 withTime: -1 isDone: NO];
 	if([[ASPreferenceController objectForKey:DetailMode] boolValue]) {
 		[_arrow setState:NSOnState];
 		[self showDetails:_arrow];
@@ -151,14 +156,14 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void)showWindow:(id)sender {
-	if(_animation && [_animation isAnimating])
-		return;
-	_fadeIn = YES;
-	_animation = [self initAnimationWithFrameRate:30 duration:0.5
-											 mode:NSAnimationNonblocking];
-	[[self window] setAlphaValue:0.0];
+	if (![[self window] isVisible]) {
+		_fadeIn = YES;
+		_animation = [self initAnimationWithFrameRate:30 duration:0.5
+												 mode:NSAnimationNonblocking];
+		[[self window] setAlphaValue:0.0];
+		[_animation startAnimation];
+	}
 	[super showWindow:sender];
-	[_animation startAnimation];
 	[[self document] windowControllerDidLoadNib:self];
 }
 
@@ -214,12 +219,12 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (void) closeWindow {
-	if(_animation && [_animation isAnimating])
-		return;
-	_fadeIn = NO;
-	_animation = [self initAnimationWithFrameRate:15 duration:3
-											 mode:NSAnimationNonblocking];
-	[_animation startAnimation];
+	if ([[self window] isVisible]) {
+		_fadeIn = NO;
+		_animation = [self initAnimationWithFrameRate:15 duration:3
+												 mode:NSAnimationNonblocking];
+		[_animation startAnimation];
+	}
 }
 
 @end

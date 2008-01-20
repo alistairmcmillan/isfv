@@ -105,6 +105,24 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 			  [aTableColumn identifier], anObject);
 }
 
+//- (BOOL)tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pboard
+//{
+//    // Copy the row numbers to the pasteboard.
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
+//    [pboard declareTypes:[NSArray arrayWithObject:MyPrivateTableViewDataType] owner:self];
+//    [pboard setData:data forType:MyPrivateTableViewDataType];
+//    return YES;
+//}
+
+- (NSDragOperation)tableView:(NSTableView*)tv
+				validateDrop:(id <NSDraggingInfo>)info
+				 proposedRow:(int)row
+	   proposedDropOperation:(NSTableViewDropOperation)op {
+    //[_table setDropRow: -1 dropOperation: NSTableViewDropOn];
+    NSLog(@"validate Drop");
+    return NSDragOperationEvery;
+}
+
 - (int) numberOfRowsInTableView:(NSTableView *)aTableView {
 	return [self count];  
 }
