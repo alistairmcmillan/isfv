@@ -3,7 +3,7 @@
 //  iSFV
 //
 //  Imported from The Unarchiver 1.6 on 08/09/07.
-//  Copyright The Unarchiver Team, Albert Sodyl 2007 . All rights reserved.
+//  Copyright The Unarchiver Team, Albert Sodyl 2007, 2008. All rights reserved.
 //
 
 //	iSFV is free software; you can redistribute it and/or modify
