@@ -3,7 +3,7 @@
 //  iSFV
 //
 //  Created by Albert Sodyl on 26/12/07.
-//  Copyright 2007 Eoros. All rights reserved.
+//  Copyright 2007, 2008 Eoros. All rights reserved.
 //
 
 //	iSFV is free software; you can redistribute it and/or modify
