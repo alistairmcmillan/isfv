@@ -105,12 +105,12 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 			  [aTableColumn identifier], anObject);
 }
 
-//- (BOOL)tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pboard
-//{
+//- (BOOL) tableView:(NSTableView *) tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes
+//	  toPasteboard:(NSPasteboard*)pboard {
 //    // Copy the row numbers to the pasteboard.
 //    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
-//    [pboard declareTypes:[NSArray arrayWithObject:MyPrivateTableViewDataType] owner:self];
-//    [pboard setData:data forType:MyPrivateTableViewDataType];
+//    [pboard declareTypes:[NSArray arrayWithObject:NSFilenamesPboardType] owner:self];
+//    [pboard setData:data forType:NSFilenamesPboardType];
 //    return YES;
 //}
 
@@ -118,9 +118,42 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 				validateDrop:(id <NSDraggingInfo>)info
 				 proposedRow:(int)row
 	   proposedDropOperation:(NSTableViewDropOperation)op {
-    //[_table setDropRow: -1 dropOperation: NSTableViewDropOn];
+    //[tv setDropRow: -1 dropOperation: NSTableViewDropOn];
     NSLog(@"validate Drop");
     return NSDragOperationEvery;
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
+			  row:(int)row dropOperation:(NSTableViewDropOperation)operation {
+	if(row < 0)
+		row = 0;
+    NSPasteboard* pboard = [info draggingPasteboard];
+	NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
+    //NSLog(@"file: %@", files);
+	NSEnumerator *e = [files objectEnumerator];
+	NSString *file;
+	while((file = [e nextObject])) {
+		NSFileManager *fileMan = [NSFileManager defaultManager];
+		BOOL isDir;
+		if (![fileMan fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+			int len = [file length];
+			NSDirectoryEnumerator *dirEnum = [fileMan enumeratorAtPath:file];
+			NSString *f;
+			while ((f = [dirEnum nextObject])) {
+				[self addFile:[f substringFromIndex:len] atIndex:row];
+			}
+		} else {
+			[self addFile:file atIndex:row];
+		}
+	}
+	[aTableView reloadData];
+	return YES;
+}
+
+- (void) addFile:(NSString *)fileName atIndex:(int)index {
+	[_files insertObject:fileName atIndex:index];
+	[_checkSums insertObject:@"" atIndex:index];
+	[_statuses insertObject:[NSNumber numberWithInt:ASSFVNotChecked] atIndex:index];
 }
 
 - (int) numberOfRowsInTableView:(NSTableView *)aTableView {
