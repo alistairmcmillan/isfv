@@ -17,7 +17,7 @@ TEMPLATE=iSFV_Template.dmg
 TEMPLATE_SRC=iSFV_SRC_Template.dmg
 MASTER="iSFV-$1.dmg"
 MASTER_SRC="iSFV_Source-$1.dmg"
-SIZE=10m
+SIZE=20m
 FILES="iSFV.app"
 FILES_SRC='*.{m,h,pch,txt,xcodeproj,icns,lproj,plist}'
 
