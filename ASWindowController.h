@@ -31,6 +31,7 @@
 	IBOutlet NSTableView *_table;
 	IBOutlet NSTextField *_info;
 	IBOutlet NSButton *_cancelButton;
+	IBOutlet NSTextField *_dragLabel;
 	ASSFVData *_data;
 	int _extendedHeight;
 	BOOL _fadeIn;
@@ -43,6 +44,7 @@
 - (IBAction)verifyNotOk:(id)sender;
 - (IBAction)verifyAll:(id)sender;
 - (IBAction)verifyIndexes:(id)sender;
+- (IBAction)delete:(id)sender;
 - (void) populateData: (ASSFVData*)data;
 - (void) updateData: (int)index percentCompleted:(float)percent;
 - (void) percentCompleted:(float)percent;

@@ -3,13 +3,21 @@
         {CLASS = ASCancelButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
         {CLASS = ASDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
         {
-            ACTIONS = {cancelCheck = id; showDetails = id; }; 
+            ACTIONS = {
+                cancelCheck = id; 
+                delete = id; 
+                showDetails = id; 
+                verifyAll = id; 
+                verifyIndexes = id; 
+                verifyNotOk = id; 
+            }; 
             CLASS = ASWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_arrow" = NSButton; 
                 "_cancelButton" = NSButton; 
                 "_details" = NSTextField; 
+                "_dragLabel" = NSTextField; 
                 "_info" = NSTextField; 
                 "_level" = NSLevelIndicator; 
                 "_percentage" = NSTextField; 

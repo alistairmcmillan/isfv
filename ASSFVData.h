@@ -45,7 +45,9 @@ typedef enum _ASSFVStatus {
 - (void) replaceStatusAtIndex:(int)i with:(ASSFVStatus)status;
 - (void) replaceCheckSumAtIndex:(int)i with:(id)checkSum;
 - (void) addFile:(NSString*)fileName atIndex:(int)index atPath:(NSString*)path;
+- (void) deleteFiles:(NSIndexSet*)indexes;
 - (BOOL) isAllOkay;
+- (BOOL)tableView:(NSTableView *)aTableView deleteRows:(NSIndexSet*)indexes;
 - (NSIndexSet*)notOkIndexes;
 - (NSEnumerator*) filesEnumerator;
 - (NSEnumerator*) checkSumsEnumerator;

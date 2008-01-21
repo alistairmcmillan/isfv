@@ -8,6 +8,7 @@
 * Better abstraction of verifySFV: and generateSFV:
 * Fix menu items
 * Notifications for disabling menu items while checking
+* Drag and drop onto the app, not just table
 * AppleScript stuff
 * Dashboard widget, drag and drop
 * Automator action
