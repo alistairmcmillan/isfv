@@ -251,7 +251,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	[timer userInfo]; // To stop unused warnings?
 }
 
-- (void)verifySFV:(id)object {
+- (void)verifySFV:(NSIndexSet*)indexes {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	_date = [_date init];
 	_dataRead = 0;
@@ -273,57 +273,59 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 						waitUntilDone:YES];
 	
 	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
-		status = [[_data statusAtIndex:i] intValue];
-		_percentCompleted = (100*(float)i/[_data count]);
-		[self performSelectorOnMainThread:@selector(updateData:)
-							   withObject:[NSNumber numberWithInt:i]
-							waitUntilDone:NO];
-		filePath = [self autoCorrectPath:sfvPath ofFile:file];
-		if (![fileMan fileExistsAtPath:filePath]) {
-			status = ASSFVMissing;
-			[windowController warningFile:YES];
-		}
-		else if (![fileMan isReadableFileAtPath:filePath]) {
-			status = ASSFVNoAccess;
-			[windowController warningFile:YES];
-		}
-		else {
-			_filePercentCompleted = 0;
-			realCheckSum = [self getFileCRC:filePath atIndex:i];
-			if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X", realCheckSum]]
-				== NSOrderedSame)
-				status = ASSFVMatchCRC;
-			else {
-				status = ASSFVNotMatchCRC;
-				if (!_threadShouldExit)
-					[windowController failedFile:YES];
+		if (!indexes || [indexes containsIndex:i]) {
+			status = [[_data statusAtIndex:i] intValue];
+			_percentCompleted = (100*(float)i/[_data count]);
+			[self performSelectorOnMainThread:@selector(updateData:)
+								   withObject:[NSNumber numberWithInt:i]
+								waitUntilDone:NO];
+			filePath = [self autoCorrectPath:sfvPath ofFile:file];
+			if (![fileMan fileExistsAtPath:filePath]) {
+				status = ASSFVMissing;
+				[windowController warningFile:YES];
 			}
-		}
+			else if (![fileMan isReadableFileAtPath:filePath]) {
+				status = ASSFVNoAccess;
+				[windowController warningFile:YES];
+			}
+			else {
+				_filePercentCompleted = 0;
+				realCheckSum = [self getFileCRC:filePath atIndex:i];
+				if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X",
+					realCheckSum]] == NSOrderedSame)
+					status = ASSFVMatchCRC;
+				else {
+					status = ASSFVNotMatchCRC;
+					if (!_threadShouldExit)
+						[windowController failedFile:YES];
+				}
+			}
 #ifdef DEBUG
-		switch(status) {
-			case ASSFVMatchCRC:
-				NSLog(@"%@ - OK", file);
-				break;
-			case ASSFVNotMatchCRC:
-				NSLog(@"%@ - CRC doesn't match, is %08X, should be %@",
-					  file, realCheckSum, checkSum);
-				break;
-			case ASSFVMissing:
-				NSLog(@"%@ - Missing", file);
-				break;
-			case ASSFVNoAccess:
-				NSLog(@"%@ - No Access", file);
-				break;
-			case ASSFVUnknownError:
-				NSLog(@"%@ - Unknown Error", file);
-				break;
-			default:
-				NSLog(@"CRITICAL ERROR: Should not get here.");
-		}
+			switch(status) {
+				case ASSFVMatchCRC:
+					NSLog(@"%@ - OK", file);
+					break;
+				case ASSFVNotMatchCRC:
+					NSLog(@"%@ - CRC doesn't match, is %08X, should be %@",
+						  file, realCheckSum, checkSum);
+					break;
+				case ASSFVMissing:
+					NSLog(@"%@ - Missing", file);
+					break;
+				case ASSFVNoAccess:
+					NSLog(@"%@ - No Access", file);
+					break;
+				case ASSFVUnknownError:
+					NSLog(@"%@ - Unknown Error", file);
+					break;
+				default:
+					NSLog(@"CRITICAL ERROR: Should not get here.");
+			}
 #endif
-		if (_threadShouldExit)
-			break;
-		[_data replaceStatusAtIndex:i with:status];
+			if (_threadShouldExit)
+				break;
+			[_data replaceStatusAtIndex:i with:status];
+		}
 		i++;
 	}
 	_percentCompleted = (100*(float)i/[_data count]);
@@ -345,6 +347,96 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	_threadShouldExit = YES;
 	_threadMutex = NO;
 	[pool release];
+}
+
+- (void)generateSFV:(NSIndexSet*)indexes {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	_date = [_date init];
+	_dataRead = 0;
+	_percentCompleted = 0;
+	_filePercentCompleted = 0;
+	int i = 0;
+	NSEnumerator *e = [_data filesEnumerator];
+	NSString *file;
+	long checkSum;
+	ASSFVStatus status = [[_data statusAtIndex:i] intValue];
+	NSString *sfvPath = [[[[self fileURL] relativePath] stringByDeletingLastPathComponent]
+		stringByAppendingString:@"/"];
+	NSString *filePath;
+	NSFileManager *fileMan = [NSFileManager defaultManager];
+	
+	[self performSelectorOnMainThread:@selector(updateGUIEnable)
+						   withObject:nil
+						waitUntilDone:YES];
+	
+	while ((file = [e nextObject])) {
+		if (!indexes || [indexes containsIndex:i]) {
+			status = [[_data statusAtIndex:i] intValue];
+			_percentCompleted = (100*(float)i/[_data count]);
+			[self performSelectorOnMainThread:@selector(updateData:)
+								   withObject:[NSNumber numberWithInt:i]
+								waitUntilDone:NO];
+			filePath = [self autoCorrectPath:sfvPath ofFile:file];
+			if (![fileMan fileExistsAtPath:filePath]) {
+				status = ASSFVMissing;
+				[windowController warningFile:YES];
+			}
+			else if (![fileMan isReadableFileAtPath:filePath]) {
+				status = ASSFVNoAccess;
+				[windowController warningFile:YES];
+			}
+			else {
+				_filePercentCompleted = 0;
+				checkSum = [self getFileCRC:filePath atIndex:i];
+				[_data replaceCheckSumAtIndex:i with:[NSString stringWithFormat:@"%08X",
+					checkSum]];
+				status = ASSFVMatchCRC;
+			}
+			if (_threadShouldExit)
+				break;
+			[_data replaceStatusAtIndex:i with:status];
+		}
+		i++;
+	}
+	_percentCompleted = (100*(float)i/[_data count]);
+	if (!_threadShouldExit) {
+		if (i > 0) {
+			[windowController failedFile:NO];
+			[self performSelectorOnMainThread:@selector(finishChecking:)
+								   withObject:[NSNumber numberWithInt:(i-1)]
+								waitUntilDone:YES];
+		}
+	}
+	_threadShouldExit = YES;
+	_threadMutex = NO;
+	[pool release];
+}
+
+- (void) verifyNotOk {
+	if (!_threadMutex) {
+		_threadMutex = YES;
+		_threadShouldExit = NO;
+		[NSThread detachNewThreadSelector: @selector(verifySFV:)
+								 toTarget: self withObject: [_data notOkIndexes]];
+	}
+}
+
+- (void) verifyAll {
+	if (!_threadMutex) {
+		_threadMutex = YES;
+		_threadShouldExit = NO;
+		[NSThread detachNewThreadSelector: @selector(verifySFV:)
+								 toTarget: self withObject: nil];
+	}
+}
+
+- (void) verifyIndexes:(NSIndexSet*)indexes {
+	if (!_threadMutex) {
+		_threadMutex = YES;
+		_threadShouldExit = NO;
+		[NSThread detachNewThreadSelector: @selector(verifySFV:)
+								 toTarget: self withObject: indexes];
+	}
 }
 
 - (void) cancelCheck {
@@ -409,6 +501,22 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			}
 		}
 	}
+	if (!_threadMutex) {
+		_threadMutex = YES;
+		_threadShouldExit = NO;
+		[NSThread detachNewThreadSelector: @selector(generateSFV:)
+								 toTarget: self withObject: [_data notOkIndexes]];
+		while(_threadMutex) // ugliest hack yet
+			 [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+	}
+	NSEnumerator *e = [_data filesEnumerator];
+	NSEnumerator *c = [_data checkSumsEnumerator];
+	NSString *file, *checkSum;
+	while ((file = [e nextObject]) && (checkSum = [c nextObject])) {
+		if([checkSum length] >= 8) {
+			[result appendFormat:@"%@ %@\r\n", file, checkSum];
+		}
+	}
 	return result;
 }
 
@@ -420,9 +528,9 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
         readSuccess = YES;
 		[self parseSFV:fileContents];
         [fileContents release];
-		_threadShouldExit = NO;
 		if (!_threadMutex) {
 			_threadMutex = YES;
+			_threadShouldExit = NO;
 			[NSThread detachNewThreadSelector: @selector(verifySFV:)
 									 toTarget: self withObject: nil];
 		}		

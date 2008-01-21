@@ -40,6 +40,9 @@
 
 - (IBAction)showDetails:(id)sender;
 - (IBAction)cancelCheck:(id)sender;
+- (IBAction)verifyNotOk:(id)sender;
+- (IBAction)verifyAll:(id)sender;
+- (IBAction)verifyIndexes:(id)sender;
 - (void) populateData: (ASSFVData*)data;
 - (void) updateData: (int)index percentCompleted:(float)percent;
 - (void) percentCompleted:(float)percent;

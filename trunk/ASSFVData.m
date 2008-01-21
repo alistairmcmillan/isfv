@@ -192,6 +192,10 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	[_statuses replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:status]];
 }
 
+- (void) replaceCheckSumAtIndex:(int)i with:(id)checkSum {
+	[_checkSums replaceObjectAtIndex:i withObject:checkSum];
+}
+
 - (BOOL) isAllOkay {
 	NSEnumerator *enumerator = [self statusesEnumerator];
 	id status;
@@ -199,6 +203,18 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 		if ([status intValue] != ASSFVMatchCRC)
 			return NO;
 	return YES;
+}
+
+- (NSIndexSet*)notOkIndexes {
+	int i;
+	ASSFVStatus status;
+	NSMutableIndexSet *set = [[NSMutableIndexSet alloc] init];
+	for(i = 0; i < [self count]; i++) {
+		status = [[_statuses objectAtIndex:i] intValue];
+		if(status != ASSFVMatchCRC)
+			[set addIndex:i];
+	}
+	return set;
 }
 
 - (NSEnumerator*) filesEnumerator {

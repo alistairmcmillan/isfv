@@ -170,9 +170,9 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 
 - (void) failedFile:(BOOL)failed {
 	if(failed)
-		[_level setCriticalValue:0.00001];
+		[_level setCriticalValue:0.00002];
 	else
-		[_level setCriticalValue:0];
+		[_level setCriticalValue:101];
 }
 
 - (void) warningFile:(BOOL)warning {
@@ -217,6 +217,18 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 
 - (IBAction)cancelCheck:(id)sender {
 	[[self document] cancelCheck];
+}
+
+- (IBAction)verifyNotOk:(id)sender {
+	[[self document] verifyNotOk];
+}
+
+- (IBAction)verifyAll:(id)sender {
+	[[self document] verifyAll];
+}
+
+- (IBAction)verifyIndexes:(id)sender {
+	//[_table 
 }
 
 - (void) closeWindow {
