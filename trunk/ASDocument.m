@@ -37,6 +37,7 @@
     if (self) {
 		_data = [[ASSFVData alloc] init];
 		_date = [[NSDate alloc] init];
+		_canClose = YES;
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		[_data setDelegate:self];
@@ -337,7 +338,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			BOOL shiftKeyDown = ([[NSApp currentEvent] modifierFlags] &
 								 (NSShiftKeyMask | NSAlphaShiftKeyMask)) != 0;
 		if([[ASPreferenceController objectForKey:CloseWindow] boolValue]
-		   && [_data isAllOkay] && !shiftKeyDown)
+		   && [_data isAllOkay] && !shiftKeyDown && _canClose)
 			[self performSelectorOnMainThread:@selector(closeDocument:)
 								   withObject:[ASPreferenceController objectForKey:
 									   CloseTime]
@@ -416,6 +417,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	if (!_threadMutex) {
 		_threadMutex = YES;
 		_threadShouldExit = NO;
+		_canClose = NO;
 		[NSThread detachNewThreadSelector: @selector(verifySFV:)
 								 toTarget: self withObject: [_data notOkIndexes]];
 	}
@@ -425,6 +427,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	if (!_threadMutex) {
 		_threadMutex = YES;
 		_threadShouldExit = NO;
+		_canClose = NO;
 		[NSThread detachNewThreadSelector: @selector(verifySFV:)
 								 toTarget: self withObject: nil];
 	}
@@ -434,6 +437,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	if (!_threadMutex) {
 		_threadMutex = YES;
 		_threadShouldExit = NO;
+		_canClose = NO;
 		[NSThread detachNewThreadSelector: @selector(verifySFV:)
 								 toTarget: self withObject: indexes];
 	}
@@ -531,6 +535,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		if (!_threadMutex) {
 			_threadMutex = YES;
 			_threadShouldExit = NO;
+			_canClose = YES;
 			[NSThread detachNewThreadSelector: @selector(verifySFV:)
 									 toTarget: self withObject: nil];
 		}		
