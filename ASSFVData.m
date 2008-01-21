@@ -121,7 +121,7 @@
 				 proposedRow:(int)row
 	   proposedDropOperation:(NSTableViewDropOperation)op {
     //[tv setDropRow: -1 dropOperation: NSTableViewDropOn];
-    return NSDragOperationEvery;
+    return _allowModification ? NSDragOperationEvery : NSDragOperationNone;
 }
 
 - (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
@@ -145,14 +145,27 @@
 				while ((f = [dirEnum nextObject])) {
 					if ([fileMan fileExistsAtPath:[file stringByAppendingPathComponent:f]
 									  isDirectory:&isDir] && !isDir)
-						[self addFile:[file stringByAppendingPathComponent:f]
-							  atIndex:row atPath:path];
+						if ([self addFile:[file stringByAppendingPathComponent:f]
+								  atIndex:row atPath:path])
+							result = result || YES;
 				}
 			} else {
-				[self addFile:file atIndex:row atPath:path];
+				if ([self addFile:file atIndex:row atPath:path])
+					result = result || YES;
 			}
 		}
-		[aTableView reloadData];
+		if (result) {
+			[aTableView reloadData];
+			[[[[aTableView window] windowController] document] updateChangeCount:
+				NSChangeDone];
+		}
+	}
+	return result;
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView deleteRows:(NSIndexSet*)indexes {
+	BOOL result = NO;
+	if ([self deleteFiles:indexes] && [indexes count] > 0) {
 		[[[[aTableView window] windowController] document] updateChangeCount:
 			NSChangeDone];
 		result = YES;
@@ -160,24 +173,25 @@
 	return result;
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView deleteRows:(NSIndexSet*)indexes {
-	[self deleteFiles:indexes];
-	return YES;
-}
-
-- (void) addFile:(NSString *)fileName atIndex:(int)index atPath:(NSString*)path {
-	if([fileName isChildOfDirectory:path]) {
+- (BOOL) addFile:(NSString *)fileName atIndex:(int)index atPath:(NSString*)path {
+	BOOL result = NO;
+	if([fileName isChildOfDirectory:path] && _allowModification) {
 		fileName = [fileName substringFromIndex:[path length]+1];
 		[_files insertObject:fileName atIndex:index];
 		[_checkSums insertObject:@"" atIndex:index];
 		[_statuses insertObject:[NSNumber numberWithInt:ASSFVNotChecked] atIndex:index];
+		result = YES;
 	}
+	return result;
 }
 
-- (void) deleteFiles:(NSIndexSet*)indexes {
-	[_files removeObjectsAtIndexes:indexes];
-	[_checkSums removeObjectsAtIndexes:indexes];
-	[_statuses removeObjectsAtIndexes:indexes];
+- (BOOL) deleteFiles:(NSIndexSet*)indexes {
+	if(_allowModification) {
+		[_files removeObjectsAtIndexes:indexes];
+		[_checkSums removeObjectsAtIndexes:indexes];
+		[_statuses removeObjectsAtIndexes:indexes];
+	}
+	return _allowModification;
 }
 
 - (int) numberOfRowsInTableView:(NSTableView *)aTableView {
@@ -202,6 +216,7 @@
 }
 
 - (void) replaceStatusAtIndex:(int)i with:(ASSFVStatus)status {
+	NSParameterAssert(i >= 0 && i < [self count]);
 	[_statuses replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:status]];
 }
 
@@ -248,6 +263,10 @@
 
 - (void)setDelegate:(id)newDelegate {
     _delegate = newDelegate;
+}
+
+- (void) enableModification:(BOOL)canModify {
+	_allowModification = canModify;
 }
 
 - (NSString*)path {
