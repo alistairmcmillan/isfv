@@ -254,6 +254,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (void)verifySFV:(NSIndexSet*)indexes {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[_data enableModification:NO];
 	_date = [_date init];
 	_dataRead = 0;
 	_percentCompleted = 0;
@@ -345,6 +346,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 								waitUntilDone:YES];
 		}
 	}
+	[_data enableModification:YES];
 	_threadShouldExit = YES;
 	_threadMutex = NO;
 	[pool release];
@@ -352,6 +354,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (void)generateSFV:(NSIndexSet*)indexes {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[_data enableModification:NO];
 	_date = [_date init];
 	_dataRead = 0;
 	_percentCompleted = 0;
@@ -408,6 +411,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 								waitUntilDone:YES];
 		}
 	}
+	[_data enableModification:YES];
 	_threadShouldExit = YES;
 	_threadMutex = NO;
 	[pool release];

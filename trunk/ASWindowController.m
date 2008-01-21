@@ -258,10 +258,12 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (IBAction)delete:(id)sender {
-	NSIndexSet *indexSet = [_table selectedRowIndexes];
-	[_data deleteFiles:indexSet];
-	[_table reloadData];
-	[[self document] updateChangeCount:NSChangeDone];
+	if([_table dataSource]) {
+		NSIndexSet *indexSet = [_table selectedRowIndexes];
+		[_data deleteFiles:indexSet];
+		[_table reloadData];
+		[[self document] updateChangeCount:NSChangeDone];
+	}
 }
 
 - (void) closeWindow {

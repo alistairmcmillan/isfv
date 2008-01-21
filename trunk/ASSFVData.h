@@ -35,6 +35,7 @@ typedef enum _ASSFVStatus {
 	NSMutableArray *_checkSums;
 	NSMutableArray *_statuses;
 	id _delegate;
+	BOOL _allowModification;
 }
 
 - (int) count;
@@ -44,8 +45,9 @@ typedef enum _ASSFVStatus {
 - (id) statusAtIndex:(int)index;
 - (void) replaceStatusAtIndex:(int)i with:(ASSFVStatus)status;
 - (void) replaceCheckSumAtIndex:(int)i with:(id)checkSum;
-- (void) addFile:(NSString*)fileName atIndex:(int)index atPath:(NSString*)path;
-- (void) deleteFiles:(NSIndexSet*)indexes;
+- (void) enableModification:(BOOL)canModify;
+- (BOOL) addFile:(NSString*)fileName atIndex:(int)index atPath:(NSString*)path;
+- (BOOL) deleteFiles:(NSIndexSet*)indexes;
 - (BOOL) isAllOkay;
 - (BOOL)tableView:(NSTableView *)aTableView deleteRows:(NSIndexSet*)indexes;
 - (NSIndexSet*)notOkIndexes;

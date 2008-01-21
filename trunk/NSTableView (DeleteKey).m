@@ -38,13 +38,12 @@
 			case NSDeleteCharacter: {
 				if ([self dataSource] && [[self dataSource] respondsToSelector:
 					@selector(tableView:deleteRows:)]
-					&& [self numberOfSelectedRows] > 0) {
-					if ([[self dataSource] tableView:self
-										  deleteRows:[self selectedRowIndexes]])
-						[self reloadData];
-				} else {
+					&& [self numberOfSelectedRows] > 0
+					&& [[self dataSource] tableView:self
+										 deleteRows:[self selectedRowIndexes]])
+					[self reloadData];
+				else
 					[super keyDown:event_];
-				}
 			} break;
 			default:
 				[super keyDown:event_];

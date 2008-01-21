@@ -3,12 +3,14 @@
 * Save window sizes
 * Make bar green/yellow if it was red before saving
 * Bottom right status of OK: #, Not OK: #
+* Do not show "Corrupt" for un-calculated CRCs
 * Fix resizing of detail
 * Add support for editing SFV
 * Better abstraction of verifySFV: and generateSFV:
 * Fix menu items
 * Notifications for disabling menu items while checking
 * Drag and drop onto the app, not just table
+* Queue for checks on the same file system, but w/ "go now" button
 * AppleScript stuff
 * Dashboard widget, drag and drop
 * Automator action
