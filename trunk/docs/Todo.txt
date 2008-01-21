@@ -3,8 +3,10 @@
 * Save window sizes
 * Make bar green/yellow if it was red before saving
 * Bottom right status of OK: #, Not OK: #
+* Prevent creating a new SFV file unless it is saved properly
 * Do not show "Corrupt" for un-calculated CRCs
 * Fix resizing of detail
+* Allow ignoring .DS_Store files and other files
 * Add support for editing SFV
 * Better abstraction of verifySFV: and generateSFV:
 * Fix menu items

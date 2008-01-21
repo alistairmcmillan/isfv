@@ -4,7 +4,9 @@ iSVF Changelist
 Version 0.3
 * Added preference to close window after verification
 * Allow detailed mode to be default
-* 
+* Create/edit files is now possible
+* Summary shown after verification is complete
+* Miscellaneous bug fixes
 
 Version 0.2 - September 19, 2007
 * Fixed many bugs
