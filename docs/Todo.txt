@@ -8,12 +8,15 @@
 * Prevent creating a new SFV file unless it is saved properly
 * Do not show "Corrupt" for un-calculated CRCs
 * Fix resizing of detail
+* Detect and remove duplicate files
 * Allow ignoring .DS_Store files and other files
 * Add support for editing SFV
 * Better abstraction of verifySFV: and generateSFV:
 * Fix menu items
 * Notifications for disabling menu items while checking
 * Drag and drop onto the app, not just table
+* Accept all file types to application, create a new SFV file for them
+* Modify description to use 'Simple File Verification' instead of SFV
 * Queue for checks on the same file system, but w/ "go now" button
 * AppleScript stuff
 * Revamp user interface
