@@ -228,7 +228,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 }
 
 - (IBAction)verifyIndexes:(id)sender {
-	//[_table 
+	[[self document] verifyIndexes:[_table selectedRowIndexes]]; 
 }
 
 - (void) closeWindow {

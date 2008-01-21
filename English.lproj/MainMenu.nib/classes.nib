@@ -22,7 +22,35 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+        {
+            ACTIONS = {
+                cancelCheck = id; 
+                showDetails = id; 
+                verifyAll = id; 
+                verifyIndexes = id; 
+                verifyNotOk = id; 
+            }; 
+            CLASS = ASWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_arrow" = NSButton; 
+                "_cancelButton" = NSButton; 
+                "_details" = NSTextField; 
+                "_info" = NSTextField; 
+                "_level" = NSLevelIndicator; 
+                "_percentage" = NSTextField; 
+                "_scroller" = NSScrollView; 
+                "_status" = NSTextField; 
+                "_table" = NSTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {verifyAll = id; verifyIndexes = id; verifyNotOk = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
     ); 
     IBVersion = 1; 
 }
