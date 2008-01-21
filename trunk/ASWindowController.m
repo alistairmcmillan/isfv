@@ -172,7 +172,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	if(failed)
 		[_level setCriticalValue:0.00002];
 	else
-		[_level setCriticalValue:101];
+		[_level setCriticalValue:0];
 }
 
 - (void) warningFile:(BOOL)warning {
@@ -183,6 +183,23 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 	else {
 		[_level setWarningValue:0];
 	}
+}
+
+- (void)fadeOut:(NSTimer*)timer {
+	NSColor* color = [[timer userInfo] textColor];
+	float alpha = [color alphaComponent];
+	if (alpha <= 0 || [[timer userInfo] isHidden]) {
+		[timer invalidate];
+	} else {
+		[[timer userInfo] setTextColor:[color colorWithAlphaComponent:alpha-0.05]];
+	}
+}
+
+- (void)hideLabel:(id)label {
+	NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
+													selector:@selector(fadeOut:)
+													userInfo:label repeats:YES];
+	[timer userInfo];
 }
 
 - (IBAction)showDetails:(id)sender {
@@ -201,8 +218,16 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 		[_scroller setHidden:NO];
 		[_info setFrame:NSMakeRect(20,4,currentRect.size.width-40,14)];
 		[_info setHidden:NO];
-	}
-	else { // Collapse window
+		[_dragLabel setFrameOrigin:NSMakePoint(currentRect.size.width/2-40,
+											   currentRect.size.height/2-40)];
+		if(_data && [_data count] < 3) {
+			[_dragLabel setTextColor:[[_dragLabel textColor] colorWithAlphaComponent:1.]];
+			[_dragLabel setHidden:NO];
+			[self performSelector: @selector(hideLabel:)
+					   withObject: _dragLabel
+					   afterDelay: 5.0];
+		}
+	} else { // Collapse window
 		_extendedHeight = [[self window] contentRectForFrameRect:currentRect]
 		.size.height - WMAX_HEIGHT;
 		currentRect.origin.y += _extendedHeight;
@@ -211,6 +236,7 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 		[[self window] setContentMinSize:NSMakeSize(currentMinSize.width,WMAX_HEIGHT)];
 		[_info setHidden:YES];
 		[_scroller setHidden:YES];
+		[_dragLabel setHidden:YES];
 		[[self window] setFrame:currentRect display:YES animate:YES];
 	}
 }
@@ -229,6 +255,13 @@ stringWithFormat:@"Speed: %@ %@  Time Remaining: %@ %@", s, su, t, tu]];
 
 - (IBAction)verifyIndexes:(id)sender {
 	[[self document] verifyIndexes:[_table selectedRowIndexes]]; 
+}
+
+- (IBAction)delete:(id)sender {
+	NSIndexSet *indexSet = [_table selectedRowIndexes];
+	[_data deleteFiles:indexSet];
+	[_table reloadData];
+	[[self document] updateChangeCount:NSChangeDone];
 }
 
 - (void) closeWindow {

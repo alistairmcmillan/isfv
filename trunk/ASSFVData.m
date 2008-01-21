@@ -56,8 +56,8 @@
 	return [_files count];
 }
 
-- (id) tableView:(NSTableView *) aTableView
-objectValueForTableColumn:(NSTableColumn *) aTableColumn
+- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:
+	(NSTableColumn *) aTableColumn
 			 row:(int) rowIndex {
 	if ([[aTableColumn identifier] isEqual:@"file"]) {
 		return [self fileAtIndex:rowIndex];
@@ -153,9 +153,16 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 			}
 		}
 		[aTableView reloadData];
+		[[[[aTableView window] windowController] document] updateChangeCount:
+			NSChangeDone];
 		result = YES;
 	}
 	return result;
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView deleteRows:(NSIndexSet*)indexes {
+	[self deleteFiles:indexes];
+	return YES;
 }
 
 - (void) addFile:(NSString *)fileName atIndex:(int)index atPath:(NSString*)path {
@@ -165,6 +172,12 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 		[_checkSums insertObject:@"" atIndex:index];
 		[_statuses insertObject:[NSNumber numberWithInt:ASSFVNotChecked] atIndex:index];
 	}
+}
+
+- (void) deleteFiles:(NSIndexSet*)indexes {
+	[_files removeObjectsAtIndexes:indexes];
+	[_checkSums removeObjectsAtIndexes:indexes];
+	[_statuses removeObjectsAtIndexes:indexes];
 }
 
 - (int) numberOfRowsInTableView:(NSTableView *)aTableView {
