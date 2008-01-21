@@ -1,7 +1,7 @@
 iSVF Changelist
 ---------------
 
-Version 0.3
+Version 0.3 - January 20, 2008
 * Added preference to close window after verification
 * Allow detailed mode to be default
 * Create/edit files is now possible
