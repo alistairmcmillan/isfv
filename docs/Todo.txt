@@ -1,11 +1,13 @@
 * Update paths if doing Save As...
 * Fix re-opening a document with progress bar yellow/red
 * Save window sizes
+* Make bar green/yellow if it was red before saving
 * Bottom right status of OK: #, Not OK: #
 * Fix resizing of detail
 * Add support for editing SFV
-* Drag and drop for editing
+* Better abstraction of verifySFV: and generateSFV:
 * Fix menu items
+* Notifications for disabling menu items while checking
 * AppleScript stuff
 * Dashboard widget, drag and drop
 * Automator action

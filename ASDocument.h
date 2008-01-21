@@ -36,6 +36,9 @@
 }
 
 - (void) cancelCheck;
+- (void) verifyNotOk;
+- (void) verifyAll;
+- (void) verifyIndexes:(NSIndexSet*)indexes;
 
 @end
 
