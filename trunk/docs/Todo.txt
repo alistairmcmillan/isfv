@@ -2,6 +2,8 @@
 * Fix re-opening a document with progress bar yellow/red
 * Save window sizes
 * Make bar green/yellow if it was red before saving
+* Signify completion percentage for total in bar
+* Put something more useful instead of last file checked on label
 * Bottom right status of OK: #, Not OK: #
 * Prevent creating a new SFV file unless it is saved properly
 * Do not show "Corrupt" for un-calculated CRCs
@@ -14,6 +16,11 @@
 * Drag and drop onto the app, not just table
 * Queue for checks on the same file system, but w/ "go now" button
 * AppleScript stuff
+* Revamp user interface
+	- extend table to both left/right edges
+	- add/remove buttons
+	- scroll along while checking if in detail mode
+	- recheck button to check not ok, or hold option for all
 * Dashboard widget, drag and drop
 * Automator action
 * Support for MD5, SHA1, etc
