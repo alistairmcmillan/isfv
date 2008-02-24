@@ -532,6 +532,10 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
     BOOL readSuccess = NO;
     NSString *fileContents = [[NSString alloc] initWithData:data
 												   encoding:NSUTF8StringEncoding];
+	if (!fileContents) // Also try Unicode if UTF8 fails
+			fileContents = [[NSString alloc] initWithData:data
+												 encoding:NSUnicodeStringEncoding];
+	
     if (fileContents) {
         readSuccess = YES;
 		[self parseSFV:fileContents];
@@ -542,7 +546,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			_canClose = YES;
 			[NSThread detachNewThreadSelector: @selector(verifySFV:)
 									 toTarget: self withObject: nil];
-		}		
+		}
     }
     return readSuccess;
 }
