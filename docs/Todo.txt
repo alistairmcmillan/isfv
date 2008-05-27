@@ -1,6 +1,8 @@
 * Update paths if doing Save As...
 * Fix re-opening a document with progress bar yellow/red
 * Save window sizes
+* Open detail mode by default for new documents
+* Allow case insensitive option in preferences
 * Make bar green/yellow if it was red before saving
 * Signify completion percentage for total in bar
 * Put something more useful instead of last file checked on label
