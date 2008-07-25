@@ -259,6 +259,8 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 	_dataRead = 0;
 	_percentCompleted = 0;
 	_filePercentCompleted = 0;
+	[windowController failedFile:FALSE];
+	[windowController warningFile:FALSE];
 	int i = 0;
 	long realCheckSum;
 	NSEnumerator *e = [_data filesEnumerator];
