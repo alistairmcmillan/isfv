@@ -1,6 +1,10 @@
 iSVF Changelist
 ---------------
 
+Version 0.31 - July 26, 2012
+* Fixed crash on non-UTF8 compatible encodings
+* Fixed progress bar indicator
+
 Version 0.3 - January 20, 2008
 * Added preference to close window after verification
 * Allow detailed mode to be default
