@@ -1,6 +1,7 @@
 iSVF Changelist
 ---------------
 
+This is a bug fix release, the last to support Mac OS X 10.4
 Version 0.31 - July 26, 2012
 * Fixed crash on non-UTF8 compatible encodings
 * Fixed progress bar indicator
