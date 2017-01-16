@@ -13,7 +13,6 @@
 		5008E01E0C939F9700E89D9B /* close_hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E01B0C939F9700E89D9B /* close_hover.png */; };
 		5008E01F0C939F9700E89D9B /* close_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E01C0C939F9700E89D9B /* close_normal.png */; };
 		5008E0200C939F9700E89D9B /* close_press.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E01D0C939F9700E89D9B /* close_press.png */; };
-		502526E30D445F9E00562302 /* NSTableView (DeleteKey).m in Sources */ = {isa = PBXBuildFile; fileRef = 502526E20D445F9E00562302 /* NSTableView (DeleteKey).m */; };
 		506545050C8B8E14004D2DA9 /* iSFVDocument.icns in Resources */ = {isa = PBXBuildFile; fileRef = 506545040C8B8E14004D2DA9 /* iSFVDocument.icns */; };
 		507B19970C67F04500343AC0 /* ASWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B19960C67F04500343AC0 /* ASWindowController.m */; };
 		507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D7F7D0C684DA7002D0607 /* ASAppController.m */; };
@@ -27,6 +26,7 @@
 		8D15AC310486D014006FF6A4 /* ASDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* ASDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		F3E0EA9B1E2D7421001BE5CE /* ASTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F3E0EA9A1E2D7421001BE5CE /* ASTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +50,6 @@
 		5008E01B0C939F9700E89D9B /* close_hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_hover.png; sourceTree = "<group>"; };
 		5008E01C0C939F9700E89D9B /* close_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_normal.png; sourceTree = "<group>"; };
 		5008E01D0C939F9700E89D9B /* close_press.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_press.png; sourceTree = "<group>"; };
-		502526E20D445F9E00562302 /* NSTableView (DeleteKey).m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = "NSTableView (DeleteKey).m"; sourceTree = "<group>"; };
 		506545040C8B8E14004D2DA9 /* iSFVDocument.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = iSFVDocument.icns; sourceTree = "<group>"; };
 		506FB4800C61A057000D23B2 /* ASDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDocumentController.h; sourceTree = "<group>"; };
 		506FB4810C61A057000D23B2 /* ASDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDocumentController.m; sourceTree = "<group>"; };
@@ -65,6 +64,8 @@
 		50C3AEF60C681D1D00B1C997 /* ASSFVData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSFVData.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* iSFV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSFV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3E0EA9A1E2D7421001BE5CE /* ASTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASTableView.m; sourceTree = "<group>"; };
+		F3E0EA9E1E2D7C36001BE5CE /* ASTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASTableView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +125,6 @@
 				50C3AEF60C681D1D00B1C997 /* ASSFVData.m */,
 				50C1D2590C67C6B2006D567C /* NSString (ASExtensions).h */,
 				50C1D25A0C67C6B2006D567C /* NSString (ASExtensions).m */,
-				502526E20D445F9E00562302 /* NSTableView (DeleteKey).m */,
 				2A37F4AEFDCFA73011CA2CEA /* ASDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* ASDocument.m */,
 				5008E0180C939EE600E89D9B /* ASCancelButton.h */,
@@ -137,6 +137,8 @@
 				507D7F7D0C684DA7002D0607 /* ASAppController.m */,
 				50001B1A0D231DAD008EF652 /* ASPreferenceController.h */,
 				50001B1B0D231DAD008EF652 /* ASPreferenceController.m */,
+				F3E0EA9E1E2D7C36001BE5CE /* ASTableView.h */,
+				F3E0EA9A1E2D7421001BE5CE /* ASTableView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -254,8 +256,8 @@
 				50C3AEF70C681D1D00B1C997 /* ASSFVData.m in Sources */,
 				507D7F7E0C684DA7002D0607 /* ASAppController.m in Sources */,
 				5008E01A0C939EE600E89D9B /* ASCancelButton.m in Sources */,
+				F3E0EA9B1E2D7421001BE5CE /* ASTableView.m in Sources */,
 				50001B1C0D231DAD008EF652 /* ASPreferenceController.m in Sources */,
-				502526E30D445F9E00562302 /* NSTableView (DeleteKey).m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
