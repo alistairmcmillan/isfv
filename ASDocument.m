@@ -339,7 +339,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 							   withObject:[NSNumber numberWithInt:(i-1)]
 							waitUntilDone:YES];
 			BOOL shiftKeyDown = ([[NSApp currentEvent] modifierFlags] &
-								 (NSEventModifierFlagShift | NSEventModifierFlagCapsLock)) != 0;
+								 (NSShiftKeyMask | NSAlphaShiftKeyMask)) != 0;
 		if([[ASPreferenceController objectForKey:CloseWindow] boolValue]
 		   && [_data isAllOkay] && !shiftKeyDown && _canClose)
 			[self performSelectorOnMainThread:@selector(closeDocument:)
