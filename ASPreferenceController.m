@@ -81,7 +81,7 @@ static ASPreferenceController *sharedInstance = nil;
 
 - (void)showPanel:(id)sender {
     if (!panel) {
-        if (![NSBundle loadNibNamed:@"ASPreferences" owner:self])  {
+        if (![[NSBundle mainBundle] loadNibNamed:@"ASPreferences" owner:self topLevelObjects:nil]) {
             NSLog(@"Failed to load ASPreferences.nib");
             NSBeep();
             return;
@@ -143,7 +143,7 @@ static ASPreferenceController *sharedInstance = nil;
 
 #define getIntDefault(name) \
 {id obj = [defaults objectForKey:name]; \
-	[dict setObject:obj ? [NSNumber numberWithInt:[defaults integerForKey:name]] : \
+	[dict setObject:obj ? [NSNumber numberWithInteger:[defaults integerForKey:name]] : \
  [defaultValues() objectForKey:name] forKey:name];}
 
 + (NSDictionary *)preferencesFromDefaults {

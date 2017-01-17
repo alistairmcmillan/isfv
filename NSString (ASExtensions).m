@@ -26,7 +26,7 @@
 
 - (int) indexOfLastCharacter:(char)character {
 	int i;
-	for (i = [self length] - 1; i > 0; i--) {
+	for (i = (int)[self length] - 1; i > 0; i--) {
 		if ([self characterAtIndex:i] == character)
 			return i;
 	}
@@ -34,7 +34,7 @@
 }
 
 - (BOOL) isChildOfDirectory:(NSString*)directory {
-	BOOL result = nil;
+	BOOL result = -1;
 	NSArray *directoryComponents = [directory pathComponents];
 	NSArray *selfComponents = [self pathComponents];
 	NSEnumerator *de = [directoryComponents objectEnumerator];

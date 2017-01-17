@@ -54,33 +54,33 @@
 - (void) setInfoSpeed: (int)speed withTime: (int)time isDone: (BOOL)done {
 	NSString *s, *su, *t, *tu;
 	if(speed < 0) {
-		s = [NSString stringWithString:@"-"];
-		su = [NSString stringWithString:@""];
+		s = @"-";
+		su = @"";
 	} else {
 		if (speed >= 1024*1024) {
 			s = [NSString stringWithFormat:@"%.2f", (float) speed / (1024*1024)];
-			su = [NSString stringWithString:@"MiB/s"];
+			su = @"MiB/s";
 		} else if (speed >= 10*1024) {
 			s = [NSString stringWithFormat:@"%.1f", (float) speed / (1024)];
-			su = [NSString stringWithString:@"KiB/s"];
+			su = @"KiB/s";
 		} else {
 			s = [NSString stringWithFormat:@"%d", speed];
-			su = [NSString stringWithString:@"B/s"];
+			su = @"B/s";
 		}
 	}
 	if (time < 0) {
-		t = [NSString stringWithString:@"-"];
-		tu = [NSString stringWithString:@""];
+		t = @"-";
+		tu = @"";
 	} else {
 		if (time >= 3600) {
 			t = [NSString stringWithFormat:@"%d:%02d", time/3600, time/60];
-			tu = [NSString stringWithString:@"h"];
+			tu = @"h";
 		} else if (time >= 60) {
 			t = [NSString stringWithFormat:@"%d:%02d", time/60, time % 60];
-			tu = [NSString stringWithString:@"m"];
+			tu = @"m";
 		} else {
 			t = [NSString stringWithFormat:@"%d", time];
-			tu = [NSString stringWithString:@"s"];
+			tu = @"s";
 		}
 	}
 	if(done)

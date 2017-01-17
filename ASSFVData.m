@@ -53,7 +53,7 @@
 }
 
 - (int) count {
-	return [_files count];
+	return (int)[_files count];
 }
 
 - (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:

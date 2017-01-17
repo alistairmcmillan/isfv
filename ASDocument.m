@@ -153,7 +153,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 		crc = crc ^ 0xffffffff;
 	} else {		/* error opening file */
 		
-		NSLog(@"Fatal error: cannot read file: %s", filename);
+		NSLog(@"Fatal error: cannot read file: %@", filename);
 	}
 	
 	free(buffer);
@@ -295,7 +295,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			else {
 				_filePercentCompleted = 0;
 				realCheckSum = [self getFileCRC:filePath atIndex:i];
-				if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08X",
+				if ([checkSum caseInsensitiveCompare:[NSString stringWithFormat:@"%08lX",
 					realCheckSum]] == NSOrderedSame)
 					status = ASSFVMatchCRC;
 				else {
@@ -339,7 +339,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 							   withObject:[NSNumber numberWithInt:(i-1)]
 							waitUntilDone:YES];
 			BOOL shiftKeyDown = ([[NSApp currentEvent] modifierFlags] &
-								 (NSShiftKeyMask | NSAlphaShiftKeyMask)) != 0;
+								 (NSEventModifierFlagShift | NSEventModifierFlagCapsLock)) != 0;
 		if([[ASPreferenceController objectForKey:CloseWindow] boolValue]
 		   && [_data isAllOkay] && !shiftKeyDown && _canClose)
 			[self performSelectorOnMainThread:@selector(closeDocument:)
@@ -394,7 +394,7 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			else {
 				_filePercentCompleted = 0;
 				checkSum = [self getFileCRC:filePath atIndex:i];
-				[_data replaceCheckSumAtIndex:i with:[NSString stringWithFormat:@"%08X",
+				[_data replaceCheckSumAtIndex:i with:[NSString stringWithFormat:@"%08lX",
 					checkSum]];
 				status = ASSFVMatchCRC;
 			}
@@ -495,15 +495,14 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 			NSEnumerator *e = [_data filesEnumerator];
 			NSString *f;
 			while ((f = [e nextObject])) {
-				NSDictionary* dic = [fileMan fileAttributesAtPath:
-			 [path stringByAppendingPathComponent:f] traverseLink:YES];
+                NSError *error = nil;
+                NSDictionary* dic = [fileMan attributesOfItemAtPath:[path stringByAppendingPathComponent:f] error:&error];
 				if(dic != nil) {
 					unsigned long long fileSize = [dic fileSize];
 					NSDate *fileModDate = [dic fileModificationDate];
 					if (fileModDate) {
-						NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc]
-							init] initWithDateFormat:@"%H:%M.%S %Y-%m-%d"
-								allowNaturalLanguage:NO];
+                        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                        [dateFormatter setDateFormat:@"%H:%M.%S %Y-%m-%d"];
 						[result appendFormat:@"; %12qu  %@ %@\r\n", fileSize,
 							[dateFormatter stringFromDate:fileModDate], f];
 					}

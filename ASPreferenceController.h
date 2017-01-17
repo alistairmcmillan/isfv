@@ -55,8 +55,6 @@
 
 - (void)showPanel:(id)sender;	/* Shows the panel */
 
-- (void)miscChanged:(id)sender;
-
 - (void)updateUI;		/* Updates the displayed values in the UI */
 - (void)commitDisplayedValues;	/* The displayed values are made current */
 - (void)discardDisplayedValues;	/* The displayed values are replaced with current
