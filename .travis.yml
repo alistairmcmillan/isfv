@@ -1,4 +1,4 @@
 language: objective-c
 
-xcode_project: isfv.xcodeproj
-xcode_scheme: isfv
+xcode_project: iSFV.xcodeproj
+xcode_scheme: iSFV
